@@ -135,8 +135,8 @@ InterceptionEvent {
 ## 6. Rozhraní
 
 ### 6.1 Extension Points
-- `com.jirak.terminalsafety.ruleProvider` — EP pro přidání pravidel z jiných pluginů
-- `com.jirak.terminalsafety.contextProvider` — EP pro custom kontext detekci
+- `com.jakubjirak.terminalsafety.ruleProvider` — EP pro přidání pravidel z jiných pluginů
+- `com.jakubjirak.terminalsafety.contextProvider` — EP pro custom kontext detekci
 
 ### 6.2 UI komponenty
 - Settings page (Configurable)
