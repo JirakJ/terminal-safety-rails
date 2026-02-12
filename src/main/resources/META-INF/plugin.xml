@@ -1,0 +1,52 @@
+<idea-plugin>
+    <id>com.jakubjirak.terminalsafety</id>
+    <name>Terminal Safety Rails</name>
+    <vendor email="jakub@jirak.dev" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
+
+    <description><![CDATA[
+    <h2>Terminal Safety Rails</h2>
+    <p>Detects dangerous commands in your IDE terminal and shows a warning/confirmation dialog before execution.
+    Protects against accidental <code>rm -rf /</code>, <code>kubectl delete</code> on production,
+    <code>terraform destroy</code>, <code>docker system prune</code>, and more.</p>
+
+    <h3>Features</h3>
+    <ul>
+        <li><b>Command interception</b> — catches dangerous commands before they execute</li>
+        <li><b>Risk levels</b> — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW</li>
+        <li><b>Confirmation dialog</b> — color-coded warning with command details</li>
+        <li><b>Built-in rules</b> — 15+ dangerous command patterns out of the box</li>
+        <li><b>Custom rules</b> — add your own patterns via settings</li>
+        <li><b>Team rules</b> — share rules via <code>.terminal-safety-rules.yaml</code></li>
+    </ul>
+
+    <h3>Part of DevOps Safety Kit</h3>
+    <p>Pairs with <b>Kubernetes Context Guard</b> for comprehensive protection against accidental
+    production changes.</p>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.terminal</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Settings page -->
+        <applicationConfigurable
+                id="com.jakubjirak.terminalsafety.settings"
+                parentId="tools"
+                displayName="Terminal Safety Rails"
+                instance="com.jakubjirak.terminalsafety.settings.TerminalSafetyConfigurable"/>
+
+        <!-- Persistent settings -->
+        <applicationService
+                serviceImplementation="com.jakubjirak.terminalsafety.settings.TerminalSafetySettings"/>
+
+        <!-- Notification group -->
+        <notificationGroup
+                id="Terminal Safety Rails"
+                displayType="BALLOON"
+                toolWindowId="Terminal"/>
+
+        <!-- Terminal command handler -->
+        <terminal.shellCommandHandler
+                implementation="com.jakubjirak.terminalsafety.interceptor.CommandInterceptor"/>
+    </extensions>
+</idea-plugin>
