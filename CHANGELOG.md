@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026.2.4] - 2026-02-13
+
+### Added
+- Added ProGuard obfuscation for code protection
+
+
 ## [2026.2.3] - 2026-02-13
 
 ### Changed
