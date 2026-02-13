@@ -4,6 +4,8 @@ intellij-platform = "2.3.0"
 junit = "5.11.4"
 detekt = "1.23.7"
 
+proguard = "7.6.1"
+
 [libraries]
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
