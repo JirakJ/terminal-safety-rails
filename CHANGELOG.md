@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026.2.3] - 2026-02-13
+
+### Changed
+- Version bump for JetBrains Marketplace publication
+
+
 ## [2026.2.2] - 2026-02-13
 
 ### Changed
