@@ -1,5 +1,12 @@
 # Changelog
 
+## [2026.2.2] - 2026-02-13
+
+### Changed
+- Expanded compatibility range: sinceBuild 232.0+ (IntelliJ 2023.2+)
+- Removed upper version bound for future IDE compatibility
+
+
 All notable changes to this project will be documented in this file.
 
 ## [2026.2.1] - 2026-02-13
