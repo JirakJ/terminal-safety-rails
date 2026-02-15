@@ -5,25 +5,35 @@
     <vendor email="jakub@jirak.dev" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
     <description><![CDATA[
-    <h2>Terminal Safety Rails</h2>
-    <p>Detects dangerous commands in your IDE terminal and shows a warning/confirmation dialog before execution.
-    Protects against accidental <code>rm -rf /</code>, <code>kubectl delete</code> on production,
-    <code>terraform destroy</code>, <code>docker system prune</code>, and more.</p>
+<h2>Terminal Safety Rails</h2>
+<p>
+  A single destructive command can ruin your day. Terminal Safety Rails intercepts dangerous commands like
+  <code>rm -rf</code>, <code>kubectl delete</code>, and <code>terraform destroy</code> <b>before</b>
+  they execute — showing a risk-level dialog that requires explicit confirmation.
+</p>
 
-    <h3>Features</h3>
-    <ul>
-        <li><b>Command interception</b> — catches dangerous commands before they execute</li>
-        <li><b>Risk levels</b> — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW</li>
-        <li><b>Confirmation dialog</b> — color-coded warning with command details</li>
-        <li><b>Built-in rules</b> — 15+ dangerous command patterns out of the box</li>
-        <li><b>Custom rules</b> — add your own patterns via settings</li>
-        <li><b>Team rules</b> — share rules via <code>.terminal-safety-rules.yaml</code></li>
-    </ul>
+<h2>Key Features</h2>
+<ul>
+  <li><b>Command Interception</b> — Catches dangerous commands before execution in the IDE terminal</li>
+  <li><b>Risk Levels</b> — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM severity with color-coded dialogs</li>
+  <li><b>15+ Built-in Patterns</b> — <code>rm -rf</code>, <code>kubectl delete</code>, <code>terraform destroy</code>, <code>docker system prune</code>, and more</li>
+  <li><b>Custom Rules</b> — Add organization-specific dangerous command patterns</li>
+  <li><b>Team Config</b> — Share rules via <code>.terminal-safety-rules.yaml</code></li>
+  <li><b>Explanation Text</b> — Each warning explains why the command is dangerous</li>
+</ul>
 
-    <h3>Part of DevOps Safety Kit</h3>
-    <p>Pairs with <b>Kubernetes Context Guard</b> for comprehensive protection against accidental
-    production changes.</p>
-    ]]></description>
+<h2>Why Terminal Safety Rails?</h2>
+<p>
+  Fat-finger mistakes in the terminal are unrecoverable. This plugin adds a critical safety layer that
+  costs zero productivity for safe commands and saves potentially catastrophic outcomes for dangerous ones.
+</p>
+
+<h2>Free vs Pro</h2>
+<ul>
+  <li><b>Free:</b> All core features — command interception, risk levels, 15+ patterns, custom rules, team config</li>
+  <li><b>Pro:</b> Command audit logging, team analytics, Slack/Teams notifications for critical commands, per-environment rules, and command approval workflows</li>
+</ul>
+]]></description>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.terminal</depends>
