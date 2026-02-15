@@ -5,6 +5,7 @@ import com.jakubjirak.terminalsafety.model.CommandRule
 import com.jakubjirak.terminalsafety.model.RiskLevel
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
 import java.nio.file.Path
 
@@ -28,7 +29,7 @@ object TeamRulesLoader {
     }
 
     fun findConfigFile(project: Project): VirtualFile? {
-        return project.baseDir?.findChild(CONFIG_FILENAME)
+        return project.guessProjectDir()?.findChild(CONFIG_FILENAME)
     }
 
     fun loadRules(project: Project): List<CommandRule> {
