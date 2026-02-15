@@ -1,5 +1,6 @@
 <idea-plugin>
     <id>com.jakubjirak.terminalsafety</id>
+    <product-descriptor code="PTERMINALSAFETY" release-date="20260215" release-version="20262" optional="true"/>
     <name>Terminal Safety Rails</name>
     <vendor email="jakub@jirak.dev" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
