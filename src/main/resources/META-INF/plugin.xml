@@ -2,38 +2,74 @@
     <id>com.jakubjirak.terminalsafety</id>
     <product-descriptor code="PTERMINALSAFETY" release-date="20260215" release-version="20262" optional="true"/>
     <name>Terminal Safety Rails</name>
-    <vendor email="jakub@jirak.dev" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
+    <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
     <description><![CDATA[
-<h2>Terminal Safety Rails</h2>
+<h2>Terminal Safety Rails — Intercept Dangerous Commands Before Execution</h2>
+
 <p>
-  A single destructive command can ruin your day. Terminal Safety Rails intercepts dangerous commands like
-  <code>rm -rf</code>, <code>kubectl delete</code>, and <code>terraform destroy</code> <b>before</b>
-  they execute — showing a risk-level dialog that requires explicit confirmation.
+  A single destructive command can ruin your day. Terminal Safety Rails intercepts dangerous commands
+  like <code>rm -rf</code>, <code>kubectl delete</code>, and <code>terraform destroy</code> before
+  they execute — showing a risk-level confirmation dialog that requires explicit approval.
 </p>
 
-<h2>Key Features</h2>
+<h3>Command Interception</h3>
 <ul>
-  <li><b>Command Interception</b> — Catches dangerous commands before execution in the IDE terminal</li>
-  <li><b>Risk Levels</b> — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM severity with color-coded dialogs</li>
-  <li><b>15+ Built-in Patterns</b> — <code>rm -rf</code>, <code>kubectl delete</code>, <code>terraform destroy</code>, <code>docker system prune</code>, and more</li>
-  <li><b>Custom Rules</b> — Add organization-specific dangerous command patterns</li>
-  <li><b>Team Config</b> — Share rules via <code>.terminal-safety-rules.yaml</code></li>
-  <li><b>Explanation Text</b> — Each warning explains why the command is dangerous</li>
+  <li><b>23 Built-in Rules</b> — Covers filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions</li>
+  <li><b>4 Risk Levels</b> — CRITICAL (red), HIGH (orange), MEDIUM (yellow), LOW (green) with color-coded dialogs</li>
+  <li><b>Confirmation Dialog</b> — Shows matched command, risk level, category, and explanation before execution</li>
+  <li><b>Zero overhead for safe commands</b> — Only dangerous patterns trigger the dialog</li>
 </ul>
 
-<h2>Why Terminal Safety Rails?</h2>
-<p>
-  Fat-finger mistakes in the terminal are unrecoverable. This plugin adds a critical safety layer that
-  costs zero productivity for safe commands and saves potentially catastrophic outcomes for dangerous ones.
-</p>
-
-<h2>Free vs Pro</h2>
+<h3>Customization</h3>
 <ul>
-  <li><b>Free:</b> All core features — command interception, risk levels, 15+ patterns, custom rules, team config</li>
-  <li><b>Pro:</b> Command audit logging, team analytics, Slack/Teams notifications for critical commands, per-environment rules, and command approval workflows</li>
+  <li><b>Custom Rules</b> — Add your own patterns with glob or regex matching and configurable risk levels</li>
+  <li><b>Team-Shared Rules</b> — Share rules via .terminal-safety-rules.yaml in your project root</li>
+  <li><b>Enable/Disable Toggle</b> — Quickly turn protection on and off</li>
 </ul>
-]]></description>
+
+<h3>Pro Features</h3>
+<ul>
+  <li><b>Unlimited Custom Rules</b> — No cap on custom command patterns</li>
+  <li><b>Context-Aware Detection</b> — Smarter matching based on environment</li>
+  <li><b>Audit Log</b> — Track all intercepted commands with timestamps and actions</li>
+  <li><b>Command Statistics</b> — Analytics on intercepted commands and usage patterns</li>
+</ul>
+
+<h3>Pricing</h3>
+<ul>
+  <li><b>Free:</b> Command interception, 23 built-in rules, 4 risk levels, up to 5 custom rules, color-coded dialogs</li>
+  <li><b>Pro ($3.90/month):</b> Unlimited custom rules, context-aware detection, audit log, team-shared rules, statistics</li>
+</ul>
+
+<h3>Requirements</h3>
+<ul>
+  <li>IntelliJ IDEA 2024.3+ (or any JetBrains IDE based on IntelliJ Platform)</li>
+  <li>Terminal plugin (bundled with JetBrains IDEs)</li>
+  <li>Java 17+</li>
+</ul>
+
+<h3>Support</h3>
+<ul>
+  <li><a href="https://github.com/JirakJ/terminal-safety-rails/issues">Issue Tracker</a></li>
+  <li><a href="https://github.com/JirakJ/terminal-safety-rails">Documentation</a></li>
+</ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <h3>What's New</h3>
+        <ul>
+            <li><b>Command Interception</b> - Catches dangerous terminal commands before execution and shows a confirmation dialog</li>
+            <li><b>4 Risk Levels</b> - Color-coded CRITICAL, HIGH, MEDIUM, and LOW severity ratings for each intercepted command</li>
+            <li><b>23 Built-in Rules</b> - Pre-configured patterns covering filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions</li>
+            <li><b>Custom Rules</b> - Add your own dangerous command patterns with glob or regex matching and configurable risk levels</li>
+            <li><b>Color-Coded Confirmation Dialog</b> - Visual warning dialog showing the matched command, risk level, and explanation of why the command is dangerous</li>
+            <li><b>Team-Shared Rules</b> - Share safety rules across your team via a .terminal-safety-rules.yaml file in your project root</li>
+            <li><b>Context-Aware Detection</b> - Smarter matching based on the current environment and context (Pro)</li>
+            <li><b>Audit Log</b> - Track all intercepted commands with timestamps and actions taken (Pro)</li>
+            <li><b>Command Statistics</b> - Analytics on intercepted commands and team usage patterns (Pro)</li>
+        </ul>
+    ]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.jetbrains.plugins.terminal</depends>
