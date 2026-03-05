@@ -4,8 +4,7 @@
     <name>Terminal Safety Rails</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
-    <description><![CDATA[
-<h2>Terminal Safety Rails — Intercept Dangerous Commands Before Execution</h2>
+    <description><![CDATA[<h2>Terminal Safety Rails — Intercept Dangerous Commands Before Execution</h2>
 
 <p>
   A single destructive command can ruin your day. Terminal Safety Rails intercepts dangerous commands
@@ -28,18 +27,11 @@
   <li><b>Enable/Disable Toggle</b> — Quickly turn protection on and off</li>
 </ul>
 
-<h3>Pro Features</h3>
 <ul>
   <li><b>Unlimited Custom Rules</b> — No cap on custom command patterns</li>
   <li><b>Context-Aware Detection</b> — Smarter matching based on environment</li>
   <li><b>Audit Log</b> — Track all intercepted commands with timestamps and actions</li>
   <li><b>Command Statistics</b> — Analytics on intercepted commands and usage patterns</li>
-</ul>
-
-<h3>Pricing</h3>
-<ul>
-  <li><b>Free:</b> Command interception, 23 built-in rules, 4 risk levels, up to 5 custom rules, color-coded dialogs</li>
-  <li><b>Pro ($3.90/month):</b> Unlimited custom rules, context-aware detection, audit log, team-shared rules, statistics</li>
 </ul>
 
 <h3>Requirements</h3>
@@ -53,8 +45,7 @@
 <ul>
   <li><a href="https://github.com/JirakJ/terminal-safety-rails/issues">Issue Tracker</a></li>
   <li><a href="https://github.com/JirakJ/terminal-safety-rails">Documentation</a></li>
-</ul>
-    ]]></description>
+</ul>]]></description>
 
     <change-notes><![CDATA[
         <h3>What's New</h3>
@@ -95,5 +86,8 @@
         <!-- Terminal command handler -->
         <terminal.shellCommandHandler
                 implementation="com.jakubjirak.terminalsafety.interceptor.CommandInterceptor"/>
+    
+        <notificationGroup id="Terminal Safety Rails Feedback" displayType="BALLOON"/>
+        <projectActivity implementation="com.jakubjirak.terminalsafety.feedback.FeedbackNotifier"/>
     </extensions>
 </idea-plugin>
