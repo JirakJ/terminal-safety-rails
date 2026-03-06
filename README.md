@@ -8,16 +8,12 @@
 
 ## ✨ Features
 
-### Free Tier
 - **Command interception** — catches dangerous commands before they execute in the IDE terminal
 - **4 risk levels** — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW
 - **Color-coded confirmation dialog** — warning with command details and risk level
 - **23 built-in rules** — dangerous command patterns out of the box covering filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions
-- **Up to 5 custom rules** — add your own patterns via settings
+- **Unlimited custom rules** — add your own patterns via settings
 - **Enable/disable toggle** — quickly turn protection on and off
-
-### Pro Tier ($3.90/month)
-- **Unlimited custom rules** — no cap on custom command patterns
 - **Context-aware detection** — smarter matching based on environment
 - **Audit log** — track all intercepted commands with timestamps and actions (ALLOWED/BLOCKED)
 - **Team-shared rules** — share rules via `.terminal-safety-rules.yaml` in your project

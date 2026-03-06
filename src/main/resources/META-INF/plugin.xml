@@ -1,6 +1,5 @@
 <idea-plugin>
     <id>com.jakubjirak.terminalsafety</id>
-    <product-descriptor code="PTERMINALSAFETY" release-date="20260215" release-version="20262" optional="true"/>
     <name>Terminal Safety Rails</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
 
@@ -56,9 +55,9 @@
             <li><b>Custom Rules</b> - Add your own dangerous command patterns with glob or regex matching and configurable risk levels</li>
             <li><b>Color-Coded Confirmation Dialog</b> - Visual warning dialog showing the matched command, risk level, and explanation of why the command is dangerous</li>
             <li><b>Team-Shared Rules</b> - Share safety rules across your team via a .terminal-safety-rules.yaml file in your project root</li>
-            <li><b>Context-Aware Detection</b> - Smarter matching based on the current environment and context (Pro)</li>
-            <li><b>Audit Log</b> - Track all intercepted commands with timestamps and actions taken (Pro)</li>
-            <li><b>Command Statistics</b> - Analytics on intercepted commands and team usage patterns (Pro)</li>
+            <li><b>Context-Aware Detection</b> - Smarter matching based on the current environment and context</li>
+            <li><b>Audit Log</b> - Track all intercepted commands with timestamps and actions taken</li>
+            <li><b>Command Statistics</b> - Analytics on intercepted commands and team usage patterns</li>
         </ul>
     ]]></change-notes>
 
