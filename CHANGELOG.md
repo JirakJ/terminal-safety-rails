@@ -44,7 +44,6 @@ All notable changes to this project will be documented in this file.
 - Configurable settings page (Settings → Tools → Terminal Safety Rails)
 - Audit log tracking intercepted commands with timestamps and ALLOWED/BLOCKED status
 - Team-shared rules via `.terminal-safety-rules.yaml` project file
-- Freemium licensing gate (free: 5 custom rules max; pro: unlimited)
 - Balloon notifications for blocked commands
 - Persistent settings stored in `terminalSafetySettings.xml`
 - Part of DevOps Safety Kit bundle

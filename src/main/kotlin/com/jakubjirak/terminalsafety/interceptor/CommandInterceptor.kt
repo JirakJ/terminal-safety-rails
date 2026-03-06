@@ -1,6 +1,5 @@
 package com.jakubjirak.terminalsafety.interceptor
 
-import com.jakubjirak.terminalsafety.licensing.FreemiumGate
 import com.jakubjirak.terminalsafety.model.DangerousCommand
 import com.jakubjirak.terminalsafety.rules.CommandRuleEngine
 import com.jakubjirak.terminalsafety.settings.TerminalSafetySettings
@@ -44,16 +43,12 @@ class CommandInterceptor : TerminalShellCommandHandler {
 
         if (allowed) {
             notifyAllowed(project, result)
-            if (FreemiumGate.getInstance().isPaidFeatureAvailable(FreemiumGate.FEATURE_AUDIT_LOG)) {
-                settings.addToAuditLog(command, result.matchedRule.description, true)
-            }
+            settings.addToAuditLog(command, result.matchedRule.description, true)
             return false
         }
 
         notifyBlocked(project, result)
-        if (FreemiumGate.getInstance().isPaidFeatureAvailable(FreemiumGate.FEATURE_AUDIT_LOG)) {
-            settings.addToAuditLog(command, result.matchedRule.description, false)
-        }
+        settings.addToAuditLog(command, result.matchedRule.description, false)
         return true
     }
 
