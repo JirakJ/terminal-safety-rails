@@ -78,6 +78,10 @@ intellijPlatform {
 }
 
 tasks {
+    publishPlugin {
+        token.set(System.getenv("PLUGIN_TOKEN"))
+    }
+
     test {
         useJUnitPlatform()
     }
