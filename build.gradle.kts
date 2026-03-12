@@ -71,6 +71,7 @@ intellijPlatform {
         ides {
             ide("IC", "2023.2.8")
             ide("IC", "2024.3")
+            ide("IC", "2025.1.3")
         }
     }
 
