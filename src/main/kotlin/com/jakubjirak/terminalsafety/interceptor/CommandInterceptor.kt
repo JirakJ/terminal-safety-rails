@@ -5,6 +5,9 @@ import com.jakubjirak.terminalsafety.analytics.RuleAnalyticsService
 import com.jakubjirak.terminalsafety.audit.AuditLogService
 import com.jakubjirak.terminalsafety.audit.UserDecision
 import com.jakubjirak.terminalsafety.model.DangerousCommand
+import com.jakubjirak.terminalsafety.risk.RiskAlertDialog
+import com.jakubjirak.terminalsafety.risk.RiskLevel as HeuristicRiskLevel
+import com.jakubjirak.terminalsafety.risk.RiskScoringService
 import com.jakubjirak.terminalsafety.rules.CommandRuleEngine
 import com.jakubjirak.terminalsafety.settings.TerminalSafetySettings
 import com.jakubjirak.terminalsafety.ui.DangerousCommandDialog
@@ -25,7 +28,15 @@ class CommandInterceptor : TerminalShellCommandHandler {
         val settings = TerminalSafetySettings.getInstance()
         if (!settings.enabled) return false
         val allRules = settings.getEffectiveRules()
-        return CommandRuleEngine.evaluate(command, allRules) != null
+        if (CommandRuleEngine.evaluate(command, allRules) != null) return true
+        // Proactive layer: also intercept on HIGH+ heuristic risk so the risk
+        // alert dialog can be shown before the shell receives the command.
+        return try {
+            RiskScoringService.getInstance(project).assess(command).level.ordinal >=
+                HeuristicRiskLevel.HIGH.ordinal
+        } catch (_: Throwable) {
+            false
+        }
     }
 
     override fun execute(
@@ -39,7 +50,32 @@ class CommandInterceptor : TerminalShellCommandHandler {
         if (!settings.enabled) return false
 
         val allRules = settings.getEffectiveRules()
-        val result = CommandRuleEngine.evaluate(command, allRules) ?: return false
+        val ruleResult = CommandRuleEngine.evaluate(command, allRules)
+
+        // Heuristic risk scoring runs BEFORE rule evaluation gating so we can
+        // (a) surface a proactive warning layer even when no rule matches, and
+        // (b) enrich audit telemetry with the computed score when a rule does
+        // match. Scorer is pure, in-memory, and safe to call on the EDT.
+        val riskAssessment = try {
+            RiskScoringService.getInstance(project).assess(command)
+        } catch (t: Throwable) {
+            LOG.warn("Risk scoring failed", t); null
+        }
+
+        if (ruleResult == null) {
+            if (riskAssessment != null &&
+                riskAssessment.level.ordinal >= HeuristicRiskLevel.HIGH.ordinal
+            ) {
+                val proceed = RiskAlertDialog.showAndGet(project, riskAssessment)
+                if (!proceed) {
+                    LOG.info("Heuristic risk alert blocked command: ${riskAssessment.score}")
+                    return true
+                }
+            }
+            return false
+        }
+
+        val result = ruleResult
 
         LOG.info("Dangerous command detected: ${result.matchedRule.description} — ${result.command}")
 

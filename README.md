@@ -51,6 +51,33 @@ Every match produces a record with:
 
 Open **Tools → Show Incident Audit Log** for a filterable `JBTable` viewer (date range, rule id, decision subset, substring match, row limit) with CSV / JSON export, "Clear Log…", and "Reveal File". For headless CI pipelines, use **Tools → Export Incident Audit Log** — the file extension you choose (`.csv` or `.json`) selects the export format and a notification with row count is shown when the write completes. Writes are dispatched off the EDT via `AppExecutorUtil`, so a noisy terminal never blocks the UI.
 
+## 🧮 Command Risk Scoring & Heuristic Classifier
+
+In addition to the *rule-based* deny/allow engine, Terminal Safety Rails ships a complementary **heuristic scorer** that turns any command into a deterministic `0..100` risk score plus a five-band classification (`SAFE`, `LOW`, `MEDIUM`, `HIGH`, `CRITICAL`). When no explicit rule matches but the score crosses the `HIGH` threshold, the user is presented with a **Risk Alert** dialog that lists every triggered signal — so genuinely novel footguns stop being silent.
+
+| Detector | Example signal | Weight |
+|----------|----------------|--------|
+| Destructive file ops | `rm -rf /` | 95 |
+| Destructive file ops | `--no-preserve-root` | 85 |
+| Destructive file ops | `rm -rf ~` / `rm -rf $HOME` | 75 |
+| Destructive file ops | `find … -delete` | 35 |
+| Privilege escalation | `sudo`, `su -`, `doas`, `pkexec` | 20 |
+| Shell injection | `` `cmd` ``, `$(cmd)`, `eval …` | 45 |
+| Remote code execution | `curl … \| bash` | 70 |
+| Credential exposure | `echo $SECRET`, hard-coded tokens | 40 |
+| Network exfiltration | `nc -l`, `/dev/tcp`, reverse shells | 55 |
+| Production target | hosts containing `prod`/`production` | 30 |
+| Disk wipe | `dd of=/dev/sdX`, `mkfs`, `shred` | 90 |
+| Fork bomb | `:(){ :\|:& };:` | 95 |
+| Git history rewrite | `push --force`, `filter-branch`, `reset --hard origin/…` | 40 |
+| Privileged package manager | `sudo npm -g`, `curl \| sudo apt`, `sudo pip install` | 30–55 |
+
+Weights are additive and clamped to `0..100`; `sudo rm -rf --no-preserve-root /` therefore always lands at `CRITICAL (100)`, while a lone `sudo apt update` stays in `LOW`.
+
+**Tools → Analyze Command Risk** lets you paste any command and see every triggered signal in a sortable table. **Tools → Show Recent High-Risk Commands** mines the incident audit log for the most recent `HIGH`/`CRITICAL` matches. A headless CLI (`CommandRiskCli`) is available for CI pipelines with `--command` / `--file`, `--format=text|md|json`, `--min-level`, `--out`, and `--fail-on` flags — it exits `0` on clean, `1` on threshold exceeded, `2` on usage error, with atomic output writes suitable for pipelines.
+
+Scoring runs inside a project-level `@Service` with a 30-second cache (256 entries) and defensive per-detector exception isolation, so one bad regex cannot break the engine.
+
 ## 📦 Installation
 
 ### From JetBrains Marketplace
