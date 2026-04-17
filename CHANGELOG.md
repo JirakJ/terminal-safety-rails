@@ -1,5 +1,13 @@
 # Changelog
 
+## [2026.3.7] - 2026-04-17
+
+### Added
+- **Team Rule Linter & Validator** — pre-flight checks for team-shared rule bundles. `RuleLinter` detects invalid regex (via `java.util.regex.Pattern.compile`), empty/missing patterns, duplicate rule ids, conflicting actions on identical patterns, unreachable rules shadowed by earlier broader patterns (heuristic, skips permissive LOW rules to avoid false positives on disjoint patterns), and overly-broad patterns such as `.*`/`.+`/`^.*$`.
+- **Tools → Lint Team Rules File** action runs the linter on the current project's `.terminal-safety-rules.yaml` (or a picked file) on a background task and shows results in a `JBTable` with Copy-Markdown, Export-Report, and Open-Source-File controls; status bar summarises error/warning/info counts.
+- **`RuleLintCli`** — IDE-free CLI entry point with `--source=`, `--format=markdown|json|plain`, and `--fail-on=error|warning` flags; exits 0/1/2 for CI gating.
+- **`LintMarkdownFormatter`** produces GitHub-flavoured Markdown reports with collapsible `<details>` sections when any severity group exceeds 20 issues; pipes and backticks in messages are escaped.
+
 ## [2026.3.6] - 2026-04-17
 
 ### Added

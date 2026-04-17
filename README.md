@@ -115,6 +115,49 @@ The recorded *last matched command* is automatically sanitised — long hex/base
 ### Team-Shared Rules
 Place a `.terminal-safety-rules.yaml` file in your project root to define shared safety rules for your team. Team rules are loaded automatically and merged with built-in and custom rules.
 
+### Team Rule Linter
+
+Validate your team rules file *before* it ships. From **Tools → Lint Team Rules File** (action id `TerminalSafety.LintTeamRules`) or the standalone CLI, the linter catches:
+
+- Invalid regular expressions (reported with the underlying `PatternSyntaxException` description and index).
+- Empty / whitespace-only patterns.
+- Duplicate rule ids and rules whose synthetic description was never set.
+- **Conflicting actions** — two rules with the same pattern but different risk levels.
+- **Unreachable rules** — a specific rule shadowed by an earlier broader pattern (heuristic: substring containment, skipping the permissive `LOW` level).
+- **Overly broad patterns** — `.*`, `.+`, `^.*$` on non-permissive risk levels.
+
+Results are sorted ERROR → WARNING → INFO and can be copied/exported as a GitHub-flavoured Markdown report with collapsible sections.
+
+#### CI integration example
+
+```yaml
+# .github/workflows/rules-lint.yml
+name: Lint Team Rules
+on:
+  pull_request:
+    paths: [".terminal-safety-rules.yaml"]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17" }
+      - name: Run rule linter
+        run: |
+          java -cp "path/to/terminal-safety-rails.jar" \
+            com.jakubjirak.terminalsafety.lint.RuleLintCli \
+            --source=.terminal-safety-rules.yaml \
+            --format=markdown \
+            --fail-on=error > lint-report.md
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: rules-lint, path: lint-report.md }
+```
+
+Exit codes: `0` clean, `1` bad args / missing file, `2` issues at or above the configured `--fail-on` threshold.
+
 ### Risk Level Colors
 | Level | Color | Hex |
 |-------|-------|-----|
