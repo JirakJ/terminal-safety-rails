@@ -1,5 +1,15 @@
 # Changelog
 
+## [2026.3.10] - 2026-04-17
+
+### Fixed
+- Replaced deprecated `FileSaverDescriptor(String, String, String...)` constructor usages (flagged by the JetBrains Marketplace plugin verifier on IC 2025.1+) with the non-deprecated two-argument constructor plus `withExtensionFilter(...)`. Affected actions: Export Audit Log (`ExportAuditLogAction`, `ShowAuditLogAction`), Export Rule Analytics (`ShowRuleAnalyticsAction`), and Export Lint Report (`LintTeamRulesAction`). Behaviour (save dialogs, filters, filename defaults) is unchanged.
+
+### Changed
+- Bumped minimum supported IDE to 2025.1 (`sinceBuild=251`) — required by the non-deprecated `FileSaverDescriptor` API introduced in that release.
+- Upgraded IntelliJ Platform compile target to `2025.1`.
+- Updated plugin verifier matrix to the latest generally-available aarch64 builds: IC `2025.1.7` and `2025.2.6.1` (IC `2025.3.x` / `2026.1` aarch64 DMGs are not yet published on `download.jetbrains.com` at release time).
+
 ## [2026.3.9] - 2026-04-18
 
 ### Added

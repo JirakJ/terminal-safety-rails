@@ -145,8 +145,7 @@ internal class LintResultsDialog(
         val descriptor = FileSaverDescriptor(
             "Export Lint Report",
             "Save the lint report as Markdown",
-            "md",
-        )
+        ).apply { withExtensionFilter("Markdown files", "md") }
         val saver = FileChooserFactory.getInstance()
             .createSaveFileDialog(descriptor, project)
         val filename = "team-rules-lint-${System.currentTimeMillis()}.md"

@@ -110,8 +110,7 @@ internal class RuleAnalyticsDialog(
         val descriptor = FileSaverDescriptor(
             "Export Rule Analytics",
             "Save the current analytics snapshot as a CSV file",
-            "csv",
-        )
+        ).apply { withExtensionFilter("CSV files", "csv") }
         val saver = FileChooserFactory.getInstance()
             .createSaveFileDialog(descriptor, project)
         val filename = "rule-analytics-${System.currentTimeMillis()}.csv"
