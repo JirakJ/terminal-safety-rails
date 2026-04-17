@@ -38,8 +38,7 @@ class ExportAuditLogAction : AnAction() {
         val descriptor = FileSaverDescriptor(
             "Export Audit Log",
             "Save the full audit log; extension (.csv or .json) selects the format.",
-            "csv", "json",
-        )
+        ).apply { withExtensionFilter("Audit log files", "csv", "json") }
         val wrapper: VirtualFileWrapper = FileChooserFactory.getInstance()
             .createSaveFileDialog(descriptor, project)
             .save(null as VirtualFile?, "audit-${System.currentTimeMillis()}.csv") ?: return

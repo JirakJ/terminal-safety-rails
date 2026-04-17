@@ -200,8 +200,7 @@ internal class AuditLogDialog(
         val descriptor = FileSaverDescriptor(
             "Export Audit Log",
             "Save the filtered audit log as a $ext file",
-            ext,
-        )
+        ).apply { withExtensionFilter("Audit log files", ext) }
         val wrapper: VirtualFileWrapper = FileChooserFactory.getInstance()
             .createSaveFileDialog(descriptor, project)
             .save(null as VirtualFile?, "audit-${System.currentTimeMillis()}.$ext") ?: return
