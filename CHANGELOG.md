@@ -1,5 +1,15 @@
 # Changelog
 
+## [2026.3.8] - 2026-04-17
+
+### Added
+- **Incident Audit Log** — per-event, append-only forensic record of every rule match, persisted as JSON Lines at `<projectBase>/.idea/terminal-safety/audit.log.jsonl` with automatic size-based rotation (10 MiB, last 5 archives retained). Captures UUID event id, epoch + ISO-8601 UTC timestamp, OS user, host name, project name/path, matched rule id & action, user decision (BLOCKED / ALLOWED / CONFIRMED_ALLOWED / CONFIRMED_BLOCKED / RAN_ANYWAY), masked command, and a SHA-256 hash of the original command for duplicate correlation without storing the cleartext. Designed for SOC2 CC7.2, ISO 27001 A.12.4, and PCI DSS 10.x evidence.
+- **`CommandMasker`** — conservative secret redactor covering long hex tokens, base64-ish tokens, `password=`, `--password=`, `token=`, `secret=`, `api[_-]?key=`, `Authorization: Bearer …`, MySQL-style `-p <value>`, and credit-card-like 13–19 digit sequences, preserving the key prefix where possible (e.g. `password=***MASKED***`). Total command truncated at 2000 chars.
+- **`AuditLogStore`** — thread-safe append-only JSONL store with atomic rotation (`ATOMIC_MOVE`) and bounded archive retention; concurrent appends from up to 16 writers yield a corruption-free log under test.
+- **Tools → Show Incident Audit Log** action: filterable `JBTable` viewer (date range, rule id, decision checkboxes, command-contains, limit) with CSV / JSON export, clear log, and "Reveal File".
+- **Tools → Export Incident Audit Log** action: headless CSV/JSON exporter for CI pipelines; extension of chosen file selects the format.
+- Full JUnit 5 coverage for the masker (every pattern + no false positives + truncation), store (append, rotation, archive cap, concurrent 16 × 500 writers, clear), exporter (CSV RFC 4180 quoting, stable column order, JSON round-trip), and filter (date range, rule ids, decisions, commandContains, userEquals, AND semantics, limit).
+
 ## [2026.3.7] - 2026-04-17
 
 ### Added
