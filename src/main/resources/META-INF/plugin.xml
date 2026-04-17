@@ -89,4 +89,13 @@
         <notificationGroup id="Terminal Safety Rails Feedback" displayType="BALLOON"/>
         <projectActivity implementation="com.jakubjirak.terminalsafety.feedback.FeedbackNotifier"/>
     </extensions>
+
+    <actions>
+        <action id="TerminalSafety.ShowRuleAnalytics"
+                class="com.jakubjirak.terminalsafety.analytics.ShowRuleAnalyticsAction"
+                text="Show Rule Effectiveness Analytics"
+                description="Open a report of how often each terminal safety rule has fired in this project.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
