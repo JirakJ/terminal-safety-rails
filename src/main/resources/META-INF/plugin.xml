@@ -103,5 +103,17 @@
                 description="Validate the project's team rules file for invalid regex, duplicates, unreachable rules, and conflicts.">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
+        <action id="TerminalSafety.ShowAuditLog"
+                class="com.jakubjirak.terminalsafety.audit.ShowAuditLogAction"
+                text="Show Incident Audit Log"
+                description="Open the forensic per-event audit log of every intercepted terminal command (SOC2 / ISO 27001 / PCI DSS evidence).">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="TerminalSafety.ExportAuditLog"
+                class="com.jakubjirak.terminalsafety.audit.ExportAuditLogAction"
+                text="Export Incident Audit Log"
+                description="Headless CSV/JSON export of the incident audit log for CI pipelines and compliance tooling.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

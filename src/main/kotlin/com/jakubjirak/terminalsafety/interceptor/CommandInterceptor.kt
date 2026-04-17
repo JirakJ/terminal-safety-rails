@@ -2,6 +2,8 @@ package com.jakubjirak.terminalsafety.interceptor
 
 import com.jakubjirak.terminalsafety.analytics.MatchAction
 import com.jakubjirak.terminalsafety.analytics.RuleAnalyticsService
+import com.jakubjirak.terminalsafety.audit.AuditLogService
+import com.jakubjirak.terminalsafety.audit.UserDecision
 import com.jakubjirak.terminalsafety.model.DangerousCommand
 import com.jakubjirak.terminalsafety.rules.CommandRuleEngine
 import com.jakubjirak.terminalsafety.settings.TerminalSafetySettings
@@ -44,14 +46,30 @@ class CommandInterceptor : TerminalShellCommandHandler {
         val allowed = DangerousCommandDialog.showAndGet(project, result)
 
         val analytics = RuleAnalyticsService.getInstance(project)
+        val audit = AuditLogService.getInstance(project)
+        val ruleAction = result.matchedRule.riskLevel.name
         if (allowed) {
             analytics.recordHit(result.matchedRule.id, MatchAction.CONFIRM_ALLOWED, result.command)
+            audit.record(
+                ruleId = result.matchedRule.id,
+                ruleDescription = result.matchedRule.description,
+                ruleAction = ruleAction,
+                decision = UserDecision.CONFIRMED_ALLOWED,
+                rawCommand = command,
+            )
             notifyAllowed(project, result)
             settings.addToAuditLog(command, result.matchedRule.description, true)
             return false
         }
 
         analytics.recordHit(result.matchedRule.id, MatchAction.CONFIRM_BLOCKED, result.command)
+        audit.record(
+            ruleId = result.matchedRule.id,
+            ruleDescription = result.matchedRule.description,
+            ruleAction = ruleAction,
+            decision = UserDecision.CONFIRMED_BLOCKED,
+            rawCommand = command,
+        )
         notifyBlocked(project, result)
         settings.addToAuditLog(command, result.matchedRule.description, false)
         return true

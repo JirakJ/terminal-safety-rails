@@ -31,6 +31,26 @@ Every time a safety rule matches a command, Terminal Safety Rails records the ou
 
 The recorded *last matched command* is automatically sanitised — long hex/base64 tokens, `password=`, `token=`, `-p <value>`, and `Authorization: Bearer …` are replaced with `***` before being stored.
 
+## 🛡️ Incident Audit Log
+
+Security teams demonstrating SOC2 (CC7.2), ISO 27001 (A.12.4), or PCI DSS (10.x) controls need **per-event** forensic evidence of every dangerous-command interception. Terminal Safety Rails writes an append-only, size-rotated JSON Lines audit log at `<project>/.idea/terminal-safety/audit.log.jsonl` (rotated at 10 MiB, last 5 archives retained).
+
+Every match produces a record with:
+
+| CSV Column       | Meaning |
+|------------------|---------|
+| `eventId`        | UUID v4 unique id for the event |
+| `isoTimestamp`   | ISO-8601 UTC timestamp |
+| `user`           | Operating-system user that ran the command |
+| `host`           | Short host name (cached after first lookup) |
+| `projectName`    | Display name of the project |
+| `ruleId`         | Stable id of the rule that matched |
+| `decision`       | `BLOCKED`, `ALLOWED`, `CONFIRMED_ALLOWED`, `CONFIRMED_BLOCKED`, or `RAN_ANYWAY` |
+| `command`        | Command line after secret masking (hex/base64/password/token/api_key/Bearer/`-p`/CC-number) |
+| `commandHash`    | SHA-256 hex of the unmasked original for duplicate correlation without storing cleartext |
+
+Open **Tools → Show Incident Audit Log** for a filterable `JBTable` viewer (date range, rule id, decision subset, substring match, row limit) with CSV / JSON export, "Clear Log…", and "Reveal File". For headless CI pipelines, use **Tools → Export Incident Audit Log** — the file extension you choose (`.csv` or `.json`) selects the export format and a notification with row count is shown when the write completes. Writes are dispatched off the EDT via `AppExecutorUtil`, so a noisy terminal never blocks the UI.
+
 ## 📦 Installation
 
 ### From JetBrains Marketplace
