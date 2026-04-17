@@ -1,5 +1,7 @@
 package com.jakubjirak.terminalsafety.interceptor
 
+import com.jakubjirak.terminalsafety.analytics.MatchAction
+import com.jakubjirak.terminalsafety.analytics.RuleAnalyticsService
 import com.jakubjirak.terminalsafety.model.DangerousCommand
 import com.jakubjirak.terminalsafety.rules.CommandRuleEngine
 import com.jakubjirak.terminalsafety.settings.TerminalSafetySettings
@@ -41,12 +43,15 @@ class CommandInterceptor : TerminalShellCommandHandler {
 
         val allowed = DangerousCommandDialog.showAndGet(project, result)
 
+        val analytics = RuleAnalyticsService.getInstance(project)
         if (allowed) {
+            analytics.recordHit(result.matchedRule.id, MatchAction.CONFIRM_ALLOWED, result.command)
             notifyAllowed(project, result)
             settings.addToAuditLog(command, result.matchedRule.description, true)
             return false
         }
 
+        analytics.recordHit(result.matchedRule.id, MatchAction.CONFIRM_BLOCKED, result.command)
         notifyBlocked(project, result)
         settings.addToAuditLog(command, result.matchedRule.description, false)
         return true

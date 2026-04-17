@@ -1,5 +1,13 @@
 # Changelog
 
+## [2026.3.6] - 2026-04-17
+
+### Added
+- **Rule Effectiveness Analytics** — project-level service (`RuleAnalyticsService`) that records every rule match (allow / block / confirm-then-allow / confirm-then-block), persisted across IDE restarts.
+- New **Tools → Show Rule Effectiveness Analytics** action opens a sortable `JBTable` of hits, block rate, last-seen time, and last matched command per rule.
+- CSV export (with RFC-4180 escaping) and "Reset All" controls in the analytics dialog.
+- Sensitive-argument masking for recorded commands: long hex/base64 tokens, `password=`, `token=`, `-p <value>`, and `Authorization: Bearer …` are replaced with `***`.
+
 ## [2026.2.4] - 2026-02-13
 
 ### Added

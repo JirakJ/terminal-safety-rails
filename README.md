@@ -18,6 +18,18 @@
 - **Audit log** — track all intercepted commands with timestamps and actions (ALLOWED/BLOCKED)
 - **Team-shared rules** — share rules via `.terminal-safety-rules.yaml` in your project
 - **Statistics** — command interception analytics
+- **Rule Effectiveness Analytics** — per-rule hit/block/allow counters with CSV export, persisted per project
+
+## 📊 Rule Effectiveness Analytics
+
+Every time a safety rule matches a command, Terminal Safety Rails records the outcome (allowed, blocked, confirmed-then-allowed, confirmed-then-blocked) in a project-level, persistent store. Open **Tools → Show Rule Effectiveness Analytics** to:
+
+- See which rules actually fire (and which are dead weight you can prune)
+- Measure noise — rules with a high confirm-then-allow rate are probably too broad
+- Audit your safety posture with the **Export CSV…** button (RFC-4180 escaped)
+- Reset counters per-rule or globally
+
+The recorded *last matched command* is automatically sanitised — long hex/base64 tokens, `password=`, `token=`, `-p <value>`, and `Authorization: Bearer …` are replaced with `***` before being stored.
 
 ## 📦 Installation
 
