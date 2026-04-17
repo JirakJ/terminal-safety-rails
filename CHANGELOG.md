@@ -1,5 +1,19 @@
 # Changelog
 
+## [2026.3.9] - 2026-04-18
+
+### Added
+- **Command Risk Scoring & Heuristic Classifier** — new `com.jakubjirak.terminalsafety.risk` package providing a deterministic 0..100 heuristic score for any terminal command, independent of the rule engine. Scores are bucketed into five bands (`SAFE 0-19`, `LOW 20-39`, `MEDIUM 40-59`, `HIGH 60-79`, `CRITICAL 80-100`).
+- **11 signal detectors** ship out-of-the-box: destructive file ops (`rm -rf /`, `rm -rf ~/$HOME`, `--no-preserve-root`, `find -delete`), privilege escalation (`sudo`, `su -`, `doas`, `pkexec`), shell injection (backticks, `$(…)`, `eval`), remote code execution (`curl|wget … | bash/sh`), credential exposure (`echo $SECRET`, hard-coded tokens), network exfiltration (`nc`, reverse shells, `/dev/tcp`), production target cues (hosts containing `prod`/`production`), disk wipe (`dd of=/dev/sdX`, `mkfs`, `shred`), fork bombs (`:(){ :|:& };:`), git history rewrites (`push --force`, `filter-branch`, `reset --hard origin/…`), and privileged package-manager use (`sudo npm -g`, `curl | sudo apt`, `sudo pip install`, `sudo gem install`).
+- **`CommandRiskScorer`** — pure, dependency-free aggregator; clamps to `0..100`, sorts signals by weight desc, isolates detector exceptions so one bad detector cannot break scoring.
+- **`RiskScoringService`** — project-level `@Service` with a 30-second, 256-entry cache to keep scoring off the hot path.
+- **Markdown + JSON reporters** (`RiskAssessmentMarkdownReporter`, `RiskAssessmentJsonReporter`) — dependency-free, deterministic output suitable for PR comments and CI artefacts.
+- **`CommandRiskCli`** — headless entry point (`--command` / `--file`, `--format=text|md|json`, `--min-level`, `--out`, `--fail-on`); atomic file writes; exits `0`/`1`/`2` for CI gating.
+- **Tools → Analyze Command Risk** action — modal dialog that scores a pasted command and displays all signals in a sortable `JBTable`.
+- **Tools → Show Recent High-Risk Commands** action — mines the incident audit log for the most recent HIGH/CRITICAL matches and renders them in a table.
+- **`RiskAlertDialog`** — integrated into `CommandInterceptor`: when no explicit rule matches but heuristic scoring reports `HIGH`+, the user is shown the signals and asked to confirm before the command runs.
+- Comprehensive JUnit 5 suite covering every detector (happy path + false-positive guard), the scorer (clamping, ordering, defensive exception handling), reporters (Markdown/JSON round-trip), CLI (exit codes 0/1/2, `--out` atomic write, `--min-level` filter), and the `RiskLevel` / `RiskSignal` value types.
+
 ## [2026.3.8] - 2026-04-17
 
 ### Added

@@ -115,5 +115,17 @@
                 description="Headless CSV/JSON export of the incident audit log for CI pipelines and compliance tooling.">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
+        <action id="TerminalSafety.AnalyzeCommandRisk"
+                class="com.jakubjirak.terminalsafety.risk.AnalyzeCommandRiskAction"
+                text="Analyze Command Risk"
+                description="Compute a heuristic 0–100 risk score and signal breakdown for an arbitrary terminal command.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="TerminalSafety.ShowRiskSummary"
+                class="com.jakubjirak.terminalsafety.risk.ShowRiskSummaryAction"
+                text="Show Command Risk Summary"
+                description="Score recent audited commands and show the highest-risk entries.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>
