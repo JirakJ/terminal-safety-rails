@@ -2,6 +2,8 @@
     <id>com.jakubjirak.terminalsafety</id>
     <name>Terminal Safety Rails</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
+    <product-descriptor code="PTERMINALSAFETY" release-date="20260418" release-version="20263" optional="true"/>
+
 
     <description><![CDATA[<h2>Terminal Safety Rails — Intercept Dangerous Commands Before Execution</h2>
 

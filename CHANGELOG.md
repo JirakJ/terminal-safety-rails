@@ -1,5 +1,11 @@
 # Changelog
 
+## [2026.3.11] - 2026-04-18
+
+### Changed
+- Enabled freemium licensing via `<product-descriptor optional="true">`. Plugin remains fully functional without a license; premium features may be introduced in future minor releases.
+
+
 ## [2026.3.10] - 2026-04-17
 
 ### Fixed
