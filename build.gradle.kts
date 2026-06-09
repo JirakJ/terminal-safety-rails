@@ -82,15 +82,15 @@ intellijPlatform {
     }
 
     publishing {
-        token.set(System.getenv("PUBLISH_TOKEN"))
+        // PUBLISH_TOKEN is the canonical variable used by all publish tooling;
+        // PLUGIN_TOKEN is kept as a fallback for older CI configurations.
+        // (A task-level override previously read only PLUGIN_TOKEN, silently
+        // sending an empty token when publishing the documented way.)
+        token.set(System.getenv("PUBLISH_TOKEN") ?: System.getenv("PLUGIN_TOKEN"))
     }
 }
 
 tasks {
-    publishPlugin {
-        token.set(System.getenv("PLUGIN_TOKEN"))
-    }
-
     test {
         useJUnitPlatform()
     }

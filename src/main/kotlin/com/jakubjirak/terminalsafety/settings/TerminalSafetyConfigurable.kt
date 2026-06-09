@@ -1,11 +1,14 @@
 package com.jakubjirak.terminalsafety.settings
 
+import com.jakubjirak.terminalsafety.policy.EnforcementMode
 import com.intellij.openapi.options.BoundConfigurable
 import com.intellij.ui.ToolbarDecorator
 import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.bindItem
 import com.intellij.ui.dsl.builder.bindSelected
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
+import javax.swing.DefaultComboBoxModel
 import javax.swing.table.DefaultTableModel
 
 class TerminalSafetyConfigurable : BoundConfigurable("Terminal Safety Rails") {
@@ -20,6 +23,20 @@ class TerminalSafetyConfigurable : BoundConfigurable("Terminal Safety Rails") {
                 checkBox("Enable Terminal Safety Rails")
                     .bindSelected(settings::enabled)
                     .comment("Enable terminal command safety analysis and blocking")
+            }
+            row("Enforcement mode:") {
+                comboBox(
+                    DefaultComboBoxModel(EnforcementMode.entries.toTypedArray()),
+                )
+                    .bindItem(
+                        { settings.enforcementModeEnum },
+                        { settings.enforcementMode = (it ?: EnforcementMode.CONFIRM).name },
+                    )
+                    .comment(
+                        "Warn only — never block, just notify. Confirm — ask before running (default). " +
+                            "Block critical — auto-block CRITICAL findings without an override. " +
+                            "Lockdown — auto-block HIGH and CRITICAL (production freeze / incident response).",
+                    )
             }
         }
 

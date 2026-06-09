@@ -2,7 +2,9 @@
     <id>com.jakubjirak.terminalsafety</id>
     <name>Terminal Safety Rails</name>
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
-    <product-descriptor code="PTERMINALSAFETY" release-date="20260418" release-version="20263" optional="true"/>
+    <!-- release-version supports only single-digit minor versions (Marketplace splits
+         the integer as <major><one-digit-minor>) — after X.9 move to the next year stream. -->
+    <product-descriptor code="PTERMINALSAFETY" release-date="20260609" release-version="20264" optional="true"/>
 
 
     <description><![CDATA[<h2>Terminal Safety Rails — Intercept Dangerous Commands Before Execution</h2>
@@ -12,6 +14,14 @@
   like <code>rm -rf</code>, <code>kubectl delete</code>, and <code>terraform destroy</code> before
   they execute — showing a risk-level confirmation dialog that requires explicit approval.
 </p>
+
+<h3>NEW: Understand, Don't Just Approve</h3>
+<ul>
+  <li><b>Command Explainer</b> — the dialog tells you in plain English what the command will actually do, with every dangerous flag decoded (rm, git, kubectl, docker, terraform, chmod, dd, find, mkfs, kill…)</li>
+  <li><b>Safer Alternatives</b> — copy-pasteable safer equivalents right in the dialog: --force-with-lease, dry runs, backups first, least-privilege chmod</li>
+  <li><b>Shell History Risk Audit</b> — score your whole ~/.zsh_history with a 0–100 safety score, risk distribution and the riskiest commands (MD/JSON/HTML export + headless CLI for security onboarding)</li>
+  <li><b>Enforcement Modes</b> — Warn only / Confirm / Block critical / Lockdown (auto-block HIGH+ during production freezes; fully audited)</li>
+</ul>
 
 <h3>Command Interception</h3>
 <ul>
@@ -49,7 +59,16 @@
 </ul>]]></description>
 
     <change-notes><![CDATA[
-        <h3>What's New</h3>
+        <h3>2026.4.0</h3>
+        <ul>
+            <li><b>Safer Alternatives</b> - The confirmation dialog now offers copy-pasteable safer equivalents (git push --force-with-lease, kubectl --dry-run=client, terraform plan -destroy, backups before DROP DATABASE, and more)</li>
+            <li><b>Command Explainer</b> - Plain-English "What will this do?" with decoded dangerous flags, right in the dialog</li>
+            <li><b>Shell History Risk Audit</b> - Score your whole shell history (zsh/bash) with a 0-100 safety score, risk distribution, riskiest commands and MD/JSON/HTML exports; headless CLI with --fail-below gate</li>
+            <li><b>Enforcement Modes</b> - Warn only / Confirm / Block critical / Lockdown: auto-block HIGH and CRITICAL findings during production freezes, fully recorded in the audit log</li>
+            <li><b>Fixed</b> - Marketplace publish token environment variable mismatch (PUBLISH_TOKEN vs PLUGIN_TOKEN)</li>
+            <li>344 unit tests, 0 failures</li>
+        </ul>
+        <h3>Earlier</h3>
         <ul>
             <li><b>Command Interception</b> - Catches dangerous terminal commands before execution and shows a confirmation dialog</li>
             <li><b>4 Risk Levels</b> - Color-coded CRITICAL, HIGH, MEDIUM, and LOW severity ratings for each intercepted command</li>
@@ -127,6 +146,12 @@
                 class="com.jakubjirak.terminalsafety.risk.ShowRiskSummaryAction"
                 text="Show Command Risk Summary"
                 description="Score recent audited commands and show the highest-risk entries.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        <action id="TerminalSafety.AuditShellHistory"
+                class="com.jakubjirak.terminalsafety.history.AuditShellHistoryAction"
+                text="Audit Shell History Risk"
+                description="Score every command in your shell history file and get a 0–100 safety score with the riskiest commands and safer alternatives.">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
