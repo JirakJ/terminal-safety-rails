@@ -1,5 +1,52 @@
 # Changelog
 
+## [2026.4.0] - 2026-06-09
+
+### Added
+- **Safer Alternative Advisor** — the confirmation dialog now offers
+  copy-pasteable safer equivalents for the command you are about to run:
+  `git push --force` → `--force-with-lease`, `git clean -fd` → dry run /
+  `git stash -u`, `git reset --hard` → stash first / `--keep`,
+  `kubectl delete` → `--dry-run=client` + explicit context, `terraform
+  destroy` → `plan -destroy`, `docker system prune -a` → scoped prune,
+  `chmod 777` → least privilege, `dd of=/dev/…` → verify target first,
+  `curl | sh` → download-inspect-run, `DROP DATABASE` → dump first,
+  `rm -rf` → interactive / list-first / trash.
+- **Command Explainer** — "What will this do?" section in the dialog:
+  plain-English summary plus decoded dangerous flags for `rm`, `git`
+  (push/clean/reset/checkout/branch), `kubectl` (delete/drain/scale),
+  `docker` (rm/rmi/prune/volume rm), `terraform`, `chmod`/`chown`, `dd`,
+  `find -delete`, `mkfs*`, `shutdown`, `kill -9`. Quotes-aware tokenizer,
+  `sudo`/`env` unwrapping.
+- **Shell History Risk Audit** — new Tools action that parses
+  `~/.zsh_history` / `~/.bash_history` (zsh extended, bash timestamps,
+  plain formats; multi-line zsh entries), scores every distinct command
+  with the existing 11 heuristic detectors, and reports a **0–100 safety
+  score**, per-level distribution and the riskiest commands with safer
+  alternatives. Exports Markdown / JSON / self-contained HTML (score ring,
+  distribution bars). Headless CLI
+  `com.jakubjirak.terminalsafety.history.HistoryAuditCli` with `--file`,
+  `--format=md|json|html`, `--top`, `--out` (atomic writes),
+  `--fail-below=<0-100>`; exit codes 0/1/2 — built for security
+  onboarding and fleet audits.
+- **Enforcement modes** — new setting with four levels driven by a pure
+  decision matrix (`EnforcementPolicyEngine`): **Warn only** (never block,
+  notify), **Confirm** (default, classic dialog), **Block critical**
+  (auto-block CRITICAL with no override), **Lockdown** (auto-block HIGH and
+  CRITICAL — production freeze / incident response). Auto decisions are
+  recorded in the incident audit log (`BLOCKED`/`ALLOWED`) and rule
+  analytics, which already reserved these states.
+- **Marketplace screenshots** under `marketing/screenshots/` and embedded
+  in the README.
+- 112 new unit tests — the suite now counts **344 tests, 0 failures**.
+
+### Fixed
+- `publishPlugin` read the Marketplace token from `PLUGIN_TOKEN` while the
+  publish tooling exports `PUBLISH_TOKEN` — a task-level override shadowed
+  the correctly configured `intellijPlatform.publishing.token`, silently
+  sending an empty token. Gradle now prefers `PUBLISH_TOKEN` with
+  `PLUGIN_TOKEN` as fallback.
+
 ## [2026.3.11] - 2026-04-18
 
 ### Changed

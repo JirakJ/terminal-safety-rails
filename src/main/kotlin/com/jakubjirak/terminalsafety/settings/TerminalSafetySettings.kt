@@ -21,6 +21,13 @@ class TerminalSafetySettings : PersistentStateComponent<TerminalSafetySettings> 
 
     var enabled: Boolean = true
 
+    /**
+     * Name of the active [com.jakubjirak.terminalsafety.policy.EnforcementMode].
+     * Stored as a string for forward-compatible XML serialization; read it via
+     * [enforcementModeEnum].
+     */
+    var enforcementMode: String = com.jakubjirak.terminalsafety.policy.EnforcementMode.CONFIRM.name
+
     @XCollection(style = XCollection.Style.v2)
     var customRules: MutableList<SerializableCommandRule> = mutableListOf()
 
@@ -32,6 +39,10 @@ class TerminalSafetySettings : PersistentStateComponent<TerminalSafetySettings> 
     override fun loadState(state: TerminalSafetySettings) {
         XmlSerializerUtil.copyBean(state, this)
     }
+
+    /** Parsed enforcement mode, defaulting to CONFIRM for unknown values. */
+    val enforcementModeEnum: com.jakubjirak.terminalsafety.policy.EnforcementMode
+        get() = com.jakubjirak.terminalsafety.policy.EnforcementMode.fromString(enforcementMode)
 
     fun getEffectiveRules(): List<CommandRule> {
         val custom = customRules.map { it.toCommandRule() }

@@ -6,6 +6,20 @@
 
 > Detects dangerous commands in your IDE terminal and shows a confirmation dialog before execution — protecting against accidental `rm -rf`, `kubectl delete`, `terraform destroy`, and more.
 
+## 📸 Screenshots
+
+| Confirmation dialog with explanation & safer alternatives | Shell History Risk Audit |
+|---|---|
+| ![Dangerous command dialog explaining what the command does and offering safer alternatives](marketing/screenshots/01-dangerous-command-dialog.png) | ![Shell history audit with 0–100 safety score and the riskiest commands](marketing/screenshots/02-history-audit.png) |
+
+| Enforcement modes (Warn / Confirm / Block critical / Lockdown) | Standalone HTML report |
+|---|---|
+| ![Settings page with the four enforcement modes](marketing/screenshots/03-enforcement-modes.png) | ![Self-contained HTML history report with score ring and risk distribution](marketing/screenshots/04-history-report.png) |
+
+| CI & compliance gates |
+|---|
+| ![Headless CLIs gating CI on command risk and history safety score](marketing/screenshots/05-ci-gates.png) |
+
 ## ✨ Features
 
 - **Command interception** — catches dangerous commands before they execute in the IDE terminal
@@ -19,6 +33,41 @@
 - **Team-shared rules** — share rules via `.terminal-safety-rules.yaml` in your project
 - **Statistics** — command interception analytics
 - **Rule Effectiveness Analytics** — per-rule hit/block/allow counters with CSV export, persisted per project
+- **🆕 Safer alternatives** — the dialog suggests copy-pasteable safer equivalents (`--force-with-lease`, dry runs, backups first)
+- **🆕 Command explainer** — plain-English "what will this do?" with decoded flags, right in the dialog
+- **🆕 Shell History Risk Audit** — score your whole `~/.zsh_history` / `~/.bash_history`, get a 0–100 safety score (MD/JSON/HTML export + CLI)
+- **🆕 Enforcement modes** — Warn only / Confirm / Block critical / Lockdown (auto-block HIGH+ for prod-freeze & compliance)
+
+## 🧭 Enforcement Modes
+
+**Settings → Tools → Terminal Safety Rails → Enforcement mode:**
+
+| Mode | Behaviour |
+|---|---|
+| **Warn only** | Never blocks — matched commands run and a warning notification is shown. Zero friction, full visibility. |
+| **Confirm** *(default)* | The classic confirmation dialog; the user decides. |
+| **Block critical** | CRITICAL findings are auto-blocked with no override dialog; everything else asks. |
+| **Lockdown** | HIGH and CRITICAL findings are auto-blocked — for production freeze windows, incident response and compliance-controlled machines. |
+
+Auto-blocked and auto-allowed events are recorded in the incident audit log
+(`BLOCKED` / `ALLOWED` decisions) and in rule analytics, so every mode stays fully auditable.
+
+## 🕰️ Shell History Risk Audit
+
+**Tools → Audit Shell History Risk** parses your shell history (zsh extended
+format, bash with timestamps, plain), scores every distinct command with the
+11 heuristic risk detectors and shows a **0–100 safety score**, risk
+distribution and the riskiest commands — each with a safer alternative when
+one exists. Exports: Markdown, JSON, self-contained HTML.
+
+The same audit runs headless (security onboarding, fleet audits):
+
+```bash
+java -cp plugin.jar com.jakubjirak.terminalsafety.history.HistoryAuditCli \
+  --file=~/.zsh_history --format=html --out=audit.html --fail-below=80
+```
+
+Exit codes: `0` ok, `1` usage/IO error, `2` safety score below `--fail-below`.
 
 ## 📊 Rule Effectiveness Analytics
 
