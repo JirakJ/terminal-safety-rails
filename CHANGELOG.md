@@ -1,5 +1,39 @@
 # Changelog
 
+## [2026.5.0] - 2026-06-11
+
+### Added
+- **Cloud Infrastructure Protection** — a new `CLOUD` rule category and a
+  `CloudDestructiveDetector` heuristic covering the destructive operations
+  most likely to turn a typo into an outage: AWS (`s3 rb`, `s3 rm
+  --recursive`, `ec2 terminate-instances`, `rds delete-db-instance/-cluster`,
+  `dynamodb delete-table`, `cloudformation delete-stack`,
+  `eks delete-cluster`), GCP (`gcloud … delete`, `gsutil rm -r`), Azure
+  (`az group delete`, `az … delete`), and adjacent tooling (`eksctl delete`,
+  `doctl … delete`). Auto-approval flags (`--force`/`--yes`/`-y`/`--quiet`/
+  `--skip-final-snapshot`) escalate the score into the CRITICAL band. Ten new
+  built-in rules back the same commands for the rule engine.
+- **SQL Mass-Mutation Guard** — `UnscopedSqlMutationDetector` plus two
+  built-in rules flag `DELETE FROM <table>` and `UPDATE <table> SET …`
+  statements that have no `WHERE` clause — the single-keystroke way to wipe or
+  rewrite an entire table. Detection is **statement-scoped**: each statement is
+  inspected independently (up to the next `;`) so a safe query earlier on the
+  line never masks an unscoped one later, and vice-versa. Recognises
+  statements embedded in `psql -c "…"` / `mysql -e '…'` invocations.
+- **Cloud & SQL safer alternatives** — the confirmation dialog now offers
+  copy-pasteable safer equivalents for the new commands: `aws s3 rb` →
+  `aws s3 ls` first, `aws ec2 terminate-instances` → `stop-instances`
+  (reversible), `gcloud … delete` → `describe` first, `az group delete` →
+  list the group's resources first, `DELETE FROM` → `SELECT *` preview +
+  transaction wrapper, unscoped `UPDATE` → transaction wrapper.
+- 54 new unit tests — the suite now counts **398 tests, 0 failures**.
+
+### Changed
+- Built-in rule count grows from 23 to **33**; heuristic detector count grows
+  from 11 to **13**.
+- Redesigned the plugin icon — a clean protective shield enclosing a terminal
+  prompt, legible at IDE list sizes (light + dark variants).
+
 ## [2026.4.0] - 2026-06-09
 
 ### Added

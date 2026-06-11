@@ -4,7 +4,7 @@
     <vendor email="support@jakubjirak.com" url="https://github.com/jakubjirak">Jakub Jirák</vendor>
     <!-- release-version supports only single-digit minor versions (Marketplace splits
          the integer as <major><one-digit-minor>) — after X.9 move to the next year stream. -->
-    <product-descriptor code="PTERMINALSAFETY" release-date="20260609" release-version="20264" optional="true"/>
+    <product-descriptor code="PTERMINALSAFETY" release-date="20260611" release-version="20265" optional="true"/>
 
 
     <description><![CDATA[<h2>Terminal Safety Rails — Intercept Dangerous Commands Before Execution</h2>
@@ -15,7 +15,14 @@
   they execute — showing a risk-level confirmation dialog that requires explicit approval.
 </p>
 
-<h3>NEW: Understand, Don't Just Approve</h3>
+<h3>NEW in 2026.5: Cloud &amp; Database Guardrails</h3>
+<ul>
+  <li><b>Cloud Infrastructure Protection</b> — intercepts destructive AWS, GCP and Azure CLI operations before they run: <code>aws s3 rb</code>, <code>aws ec2 terminate-instances</code>, <code>aws rds delete-db-instance</code>, <code>aws cloudformation delete-stack</code>, <code>gsutil rm -r</code>, <code>gcloud … delete</code>, <code>az group delete</code> and more</li>
+  <li><b>SQL Mass-Mutation Guard</b> — catches the classic data-loss footgun: <code>DELETE FROM</code> / <code>UPDATE … SET</code> with no <code>WHERE</code> clause, statement-scoped so a safe query never masks an unscoped one — including statements embedded in <code>psql -c</code> / <code>mysql -e</code></li>
+  <li><b>Cloud &amp; SQL Safer Alternatives</b> — list-before-delete, stop-instead-of-terminate, describe-first, SELECT-preview and transaction-wrapped mutations, copy-pasteable right in the dialog</li>
+</ul>
+
+<h3>Understand, Don't Just Approve</h3>
 <ul>
   <li><b>Command Explainer</b> — the dialog tells you in plain English what the command will actually do, with every dangerous flag decoded (rm, git, kubectl, docker, terraform, chmod, dd, find, mkfs, kill…)</li>
   <li><b>Safer Alternatives</b> — copy-pasteable safer equivalents right in the dialog: --force-with-lease, dry runs, backups first, least-privilege chmod</li>
@@ -25,7 +32,8 @@
 
 <h3>Command Interception</h3>
 <ul>
-  <li><b>23 Built-in Rules</b> — Covers filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions</li>
+  <li><b>33 Built-in Rules</b> — Covers filesystem, Kubernetes, Terraform, Docker, AWS/GCP/Azure cloud, Git, SQL, system services, and permissions</li>
+  <li><b>13 Heuristic Detectors</b> — A 0–100 risk score independent of the rules: destructive file ops, privilege escalation, shell injection, remote code execution, credential exposure, network exfiltration, production targets, disk wipes, fork bombs, git history rewrites, privileged package managers, cloud destruction, and unscoped SQL mutations</li>
   <li><b>4 Risk Levels</b> — CRITICAL (red), HIGH (orange), MEDIUM (yellow), LOW (green) with color-coded dialogs</li>
   <li><b>Confirmation Dialog</b> — Shows matched command, risk level, category, and explanation before execution</li>
   <li><b>Zero overhead for safe commands</b> — Only dangerous patterns trigger the dialog</li>
@@ -59,6 +67,14 @@
 </ul>]]></description>
 
     <change-notes><![CDATA[
+        <h3>2026.5.0</h3>
+        <ul>
+            <li><b>Cloud Infrastructure Protection</b> - Intercepts destructive AWS/GCP/Azure CLI commands before they run: aws s3 rb, aws ec2 terminate-instances, aws rds delete-db-instance, aws dynamodb delete-table, aws cloudformation delete-stack, aws eks delete-cluster, gcloud … delete, gsutil rm -r, az group delete (new Cloud category, 10 new rules + a heuristic detector)</li>
+            <li><b>SQL Mass-Mutation Guard</b> - Catches DELETE FROM / UPDATE … SET with no WHERE clause — statement-scoped so a safe query never masks an unscoped one, and works inside psql -c / mysql -e invocations</li>
+            <li><b>Cloud &amp; SQL Safer Alternatives</b> - The dialog now offers list-before-delete, stop-instead-of-terminate, describe-first, SELECT-preview and transaction-wrapped mutations</li>
+            <li><b>33 built-in rules and 13 heuristic detectors</b> (up from 23 rules / 11 detectors)</li>
+            <li>398 unit tests, 0 failures</li>
+        </ul>
         <h3>2026.4.0</h3>
         <ul>
             <li><b>Safer Alternatives</b> - The confirmation dialog now offers copy-pasteable safer equivalents (git push --force-with-lease, kubectl --dry-run=client, terraform plan -destroy, backups before DROP DATABASE, and more)</li>

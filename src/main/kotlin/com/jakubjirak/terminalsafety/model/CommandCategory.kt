@@ -8,6 +8,7 @@ enum class CommandCategory(val displayName: String) {
     KUBERNETES("Kubernetes"),
     TERRAFORM("Terraform"),
     DOCKER("Docker"),
+    CLOUD("Cloud"),
     GIT("Git"),
     DATABASE("Database"),
     SYSTEM("System"),

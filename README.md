@@ -12,6 +12,10 @@
 |---|---|
 | ![Dangerous command dialog explaining what the command does and offering safer alternatives](marketing/screenshots/01-dangerous-command-dialog.png) | ![Shell history audit with 0–100 safety score and the riskiest commands](marketing/screenshots/02-history-audit.png) |
 
+| Cloud infrastructure protection (AWS / GCP / Azure) | SQL mass-mutation guard (DELETE/UPDATE without WHERE) |
+|---|---|
+| ![Intercepting aws rds delete-db-instance with safer alternatives](marketing/screenshots/06-cloud-destruction.png) | ![Intercepting DELETE FROM with no WHERE clause and offering a SELECT preview and transaction wrapper](marketing/screenshots/07-sql-without-where.png) |
+
 | Enforcement modes (Warn / Confirm / Block critical / Lockdown) | Standalone HTML report |
 |---|---|
 | ![Settings page with the four enforcement modes](marketing/screenshots/03-enforcement-modes.png) | ![Self-contained HTML history report with score ring and risk distribution](marketing/screenshots/04-history-report.png) |
@@ -25,7 +29,7 @@
 - **Command interception** — catches dangerous commands before they execute in the IDE terminal
 - **4 risk levels** — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW
 - **Color-coded confirmation dialog** — warning with command details and risk level
-- **23 built-in rules** — dangerous command patterns out of the box covering filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions
+- **33 built-in rules** — dangerous command patterns out of the box covering filesystem, Kubernetes, Terraform, Docker, AWS/GCP/Azure cloud, Git, SQL, system services, and permissions
 - **Unlimited custom rules** — add your own patterns via settings
 - **Enable/disable toggle** — quickly turn protection on and off
 - **Context-aware detection** — smarter matching based on environment
@@ -37,6 +41,8 @@
 - **🆕 Command explainer** — plain-English "what will this do?" with decoded flags, right in the dialog
 - **🆕 Shell History Risk Audit** — score your whole `~/.zsh_history` / `~/.bash_history`, get a 0–100 safety score (MD/JSON/HTML export + CLI)
 - **🆕 Enforcement modes** — Warn only / Confirm / Block critical / Lockdown (auto-block HIGH+ for prod-freeze & compliance)
+- **🆕 Cloud infrastructure protection** — intercepts destructive AWS/GCP/Azure CLI commands (`aws s3 rb`, `aws ec2 terminate-instances`, `aws rds delete-db-instance`, `gsutil rm -r`, `az group delete`, …)
+- **🆕 SQL mass-mutation guard** — flags `DELETE FROM` / `UPDATE … SET` with no `WHERE` clause (statement-scoped; works inside `psql -c` / `mysql -e`)
 
 ## 🧭 Enforcement Modes
 
@@ -56,7 +62,7 @@ Auto-blocked and auto-allowed events are recorded in the incident audit log
 
 **Tools → Audit Shell History Risk** parses your shell history (zsh extended
 format, bash with timestamps, plain), scores every distinct command with the
-11 heuristic risk detectors and shows a **0–100 safety score**, risk
+13 heuristic risk detectors and shows a **0–100 safety score**, risk
 distribution and the riskiest commands — each with a safer alternative when
 one exists. Exports: Markdown, JSON, self-contained HTML.
 
@@ -120,6 +126,8 @@ In addition to the *rule-based* deny/allow engine, Terminal Safety Rails ships a
 | Fork bomb | `:(){ :\|:& };:` | 95 |
 | Git history rewrite | `push --force`, `filter-branch`, `reset --hard origin/…` | 40 |
 | Privileged package manager | `sudo npm -g`, `curl \| sudo apt`, `sudo pip install` | 30–55 |
+| Cloud destruction | `aws s3 rb`, `aws rds delete-db-instance`, `az group delete`, `gsutil rm -r` | 55–65 |
+| Unscoped SQL mutation | `DELETE FROM t` / `UPDATE t SET …` with no `WHERE` | 55–60 |
 
 Weights are additive and clamped to `0..100`; `sudo rm -rf --no-preserve-root /` therefore always lands at `CRITICAL (100)`, while a lone `sudo apt update` stays in `LOW`.
 
@@ -188,6 +196,9 @@ Scoring runs inside a project-level `@Service` with a 30-second cache (256 entri
 | `DROP TABLE` | Database | SQL DROP TABLE |
 | `DROP DATABASE` | Database | SQL DROP DATABASE |
 | `TRUNCATE` | Database | SQL TRUNCATE |
+| `DELETE FROM …;` (no `WHERE`) | Database | Wipes the whole table |
+| `aws rds delete-db-instance` | Cloud | AWS RDS database deletion |
+| `az group delete` | Cloud | Azure resource-group deletion |
 
 #### 🟠 HIGH
 | Pattern | Category | Description |
@@ -196,6 +207,12 @@ Scoring runs inside a project-level `@Service` with a 30-second cache (256 entri
 | `kubectl apply --force` | Kubernetes | Kubernetes force apply |
 | `terraform apply` | Terraform | May modify infrastructure |
 | `terraform destroy` | Terraform | Removes infrastructure |
+| `UPDATE … SET …;` (no `WHERE`) | Database | Rewrites every row |
+| `aws s3 rb` / `aws s3 rm --recursive` | Cloud | S3 bucket / recursive object delete |
+| `aws ec2 terminate-instances` | Cloud | EC2 instance termination |
+| `aws dynamodb delete-table` | Cloud | DynamoDB table deletion |
+| `aws cloudformation delete-stack` | Cloud | CloudFormation stack deletion |
+| `gsutil rm -r` | Cloud | Recursive Google Cloud Storage delete |
 
 #### 🟡 MEDIUM
 | Pattern | Category | Description |
