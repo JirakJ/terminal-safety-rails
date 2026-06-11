@@ -238,4 +238,70 @@ class CommandRuleEngineTest {
         assertEquals(".", CommandRuleEngine.globToRegex("?"))
         assertEquals("test\\.txt", CommandRuleEngine.globToRegex("test.txt"))
     }
+
+    @Test
+    fun `detect SQL DELETE without WHERE as critical`() {
+        val result = CommandRuleEngine.evaluate("DELETE FROM orders;")
+        assertNotNull(result)
+        assertEquals(RiskLevel.CRITICAL, result!!.matchedRule.riskLevel)
+        assertEquals(CommandCategory.DATABASE, result.matchedRule.category)
+    }
+
+    @Test
+    fun `SQL DELETE with WHERE is not a critical wipe`() {
+        // Must not be flagged by the unscoped-DELETE rule (no other DB rule matches a scoped delete).
+        val result = CommandRuleEngine.evaluate("DELETE FROM orders WHERE id = 1;")
+        assertNull(result)
+    }
+
+    @Test
+    fun `detect SQL UPDATE without WHERE as high`() {
+        val result = CommandRuleEngine.evaluate("UPDATE users SET active = 0;")
+        assertNotNull(result)
+        assertEquals(RiskLevel.HIGH, result!!.matchedRule.riskLevel)
+        assertEquals(CommandCategory.DATABASE, result.matchedRule.category)
+    }
+
+    @Test
+    fun `SQL UPDATE with WHERE is not flagged`() {
+        val result = CommandRuleEngine.evaluate("UPDATE users SET active = 0 WHERE id = 1;")
+        assertNull(result)
+    }
+
+    @Test
+    fun `detect aws s3 rb as cloud high`() {
+        val result = CommandRuleEngine.evaluate("aws s3 rb s3://my-bucket --force")
+        assertNotNull(result)
+        assertEquals(RiskLevel.HIGH, result!!.matchedRule.riskLevel)
+        assertEquals(CommandCategory.CLOUD, result.matchedRule.category)
+    }
+
+    @Test
+    fun `detect aws rds delete as cloud critical`() {
+        val result = CommandRuleEngine.evaluate("aws rds delete-db-instance --db-instance-identifier prod")
+        assertNotNull(result)
+        assertEquals(RiskLevel.CRITICAL, result!!.matchedRule.riskLevel)
+        assertEquals(CommandCategory.CLOUD, result.matchedRule.category)
+    }
+
+    @Test
+    fun `detect az group delete as cloud critical`() {
+        val result = CommandRuleEngine.evaluate("az group delete --name rg --yes")
+        assertNotNull(result)
+        assertEquals(RiskLevel.CRITICAL, result!!.matchedRule.riskLevel)
+        assertEquals(CommandCategory.CLOUD, result.matchedRule.category)
+    }
+
+    @Test
+    fun `detect gsutil recursive remove as cloud high`() {
+        val result = CommandRuleEngine.evaluate("gsutil -m rm -r gs://bucket/data")
+        assertNotNull(result)
+        assertEquals(RiskLevel.HIGH, result!!.matchedRule.riskLevel)
+        assertEquals(CommandCategory.CLOUD, result.matchedRule.category)
+    }
+
+    @Test
+    fun `harmless aws command is not flagged`() {
+        assertNull(CommandRuleEngine.evaluate("aws s3 ls s3://bucket"))
+    }
 }

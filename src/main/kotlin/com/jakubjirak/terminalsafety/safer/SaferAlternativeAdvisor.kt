@@ -52,6 +52,8 @@ class SaferAlternativeAdvisor {
         suggestDd(normalized, out)
         suggestPipeToShell(normalized, out)
         suggestDatabase(normalized, out)
+        suggestSql(normalized, out)
+        suggestCloud(normalized, out)
         return out
     }
 
@@ -262,6 +264,67 @@ class SaferAlternativeAdvisor {
         )
     }
 
+    private fun suggestSql(cmd: String, out: MutableList<SaferAlternative>) {
+        if (SQL_DELETE_NO_WHERE.containsMatchIn(cmd)) {
+            out += SaferAlternative(
+                id = "safer.sql-delete-select-first",
+                title = "Preview the rows with SELECT first",
+                command = cmd.replaceFirst(Regex("""(?i)delete\s+from"""), "SELECT * FROM"),
+                rationale = "Run the SELECT to see exactly which rows match before deleting — then add a WHERE clause.",
+            )
+            out += SaferAlternative(
+                id = "safer.sql-delete-transaction",
+                title = "Wrap it in a transaction you can roll back",
+                command = "BEGIN; ${cmd.trimEnd(';')}; -- inspect row count, then COMMIT or ROLLBACK;",
+                rationale = "A transaction lets you check the affected row count and ROLLBACK if it is not what you expected.",
+            )
+        }
+        if (SQL_UPDATE_NO_WHERE.containsMatchIn(cmd)) {
+            out += SaferAlternative(
+                id = "safer.sql-update-transaction",
+                title = "Wrap it in a transaction you can roll back",
+                command = "BEGIN; ${cmd.trimEnd(';')}; -- inspect row count, then COMMIT or ROLLBACK;",
+                rationale = "Without a WHERE clause this rewrites every row — a transaction lets you verify the count and ROLLBACK.",
+            )
+        }
+    }
+
+    private fun suggestCloud(cmd: String, out: MutableList<SaferAlternative>) {
+        when {
+            AWS_S3_RB.containsMatchIn(cmd) -> out += SaferAlternative(
+                id = "safer.aws-s3-list-first",
+                title = "List the bucket contents first",
+                command = cmd.replaceFirst(Regex("""(?i)s3\s+rb"""), "s3 ls"),
+                rationale = "Confirm the bucket name and that it holds nothing you need before removing it.",
+            )
+            AWS_EC2_TERMINATE.containsMatchIn(cmd) -> out += SaferAlternative(
+                id = "safer.aws-ec2-stop",
+                title = "Stop the instance instead of terminating",
+                command = cmd.replaceFirst("terminate-instances", "stop-instances"),
+                rationale = "Stop is reversible and keeps the EBS volume; terminate destroys the instance and ephemeral storage.",
+            )
+            AWS_DELETE_GENERIC.containsMatchIn(cmd) -> out += SaferAlternative(
+                id = "safer.aws-verify-identity",
+                title = "Confirm the account and region first",
+                command = "aws sts get-caller-identity && echo \"region: ${'$'}{AWS_REGION:-${'$'}(aws configure get region)}\"",
+                rationale = "Most cloud disasters are 'wrong account/region' disasters — verify both before a destructive call.",
+            )
+            GCLOUD_DELETE.containsMatchIn(cmd) && !cmd.contains("--verbosity") -> out += SaferAlternative(
+                id = "safer.gcloud-describe-first",
+                title = "Describe the resource before deleting",
+                command = cmd.replaceFirst(Regex("""\bdelete\b"""), "describe"),
+                rationale = "Verify you are pointed at the right project and resource — gcloud uses your active config by default.",
+            )
+            AZ_GROUP_DELETE.containsMatchIn(cmd) -> out += SaferAlternative(
+                id = "safer.az-group-list",
+                title = "List what the group contains first",
+                command = cmd.replaceFirst(Regex("""(?i)group\s+delete"""), "resource list --resource-group")
+                    .replace(Regex("""\s+--yes\b|\s+-y\b"""), ""),
+                rationale = "Deleting a resource group destroys every resource inside it — confirm the inventory first.",
+            )
+        }
+    }
+
     private companion object {
         val WHITESPACE = Regex("""\s+""")
         val ENV_ASSIGNMENT = Regex("""^[A-Za-z_][A-Za-z0-9_]*=.*""")
@@ -281,5 +344,12 @@ class SaferAlternativeAdvisor {
         val DD_TO_DEVICE = Regex("""^dd\b.*\bof=/dev/""")
         val PIPE_TO_SHELL = Regex("""^((?:curl|wget)\s+\S[^|]*)\|\s*(?:sudo\s+)?(?:ba|z)?sh\b""")
         val DROP_DATABASE = Regex("""\bdrop\s+(database|schema)\s+(?:if\s+exists\s+)?(\S+)""", RegexOption.IGNORE_CASE)
+        val SQL_DELETE_NO_WHERE = Regex("""\bdelete\s+from\s+[`"\[\]\w.]+\s*;?\s*$""", RegexOption.IGNORE_CASE)
+        val SQL_UPDATE_NO_WHERE = Regex("""\bupdate\s+[`"\[\]\w.]+\s+set\b(?:(?!\bwhere\b).)*$""", RegexOption.IGNORE_CASE)
+        val AWS_S3_RB = Regex("""^aws\s+s3\s+rb\b""", RegexOption.IGNORE_CASE)
+        val AWS_EC2_TERMINATE = Regex("""^aws\s+ec2\s+terminate-instances\b""", RegexOption.IGNORE_CASE)
+        val AWS_DELETE_GENERIC = Regex("""^aws\s+\w[\w-]*\s+(delete|terminate)[\w-]*\b""", RegexOption.IGNORE_CASE)
+        val GCLOUD_DELETE = Regex("""^gcloud\s+[\w\s-]*?\bdelete\b""", RegexOption.IGNORE_CASE)
+        val AZ_GROUP_DELETE = Regex("""^az\s+group\s+delete\b""", RegexOption.IGNORE_CASE)
     }
 }

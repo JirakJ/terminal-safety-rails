@@ -203,12 +203,67 @@ class SaferAlternativeAdvisorTest {
     }
 
     @Test
+    fun `DELETE without WHERE suggests SELECT preview and transaction`() {
+        val ids = ids("DELETE FROM orders")
+        assertTrue("safer.sql-delete-select-first" in ids)
+        assertTrue("safer.sql-delete-transaction" in ids)
+    }
+
+    @Test
+    fun `DELETE with WHERE yields no unscoped suggestion`() {
+        assertFalse("safer.sql-delete-select-first" in ids("DELETE FROM orders WHERE id = 1"))
+    }
+
+    @Test
+    fun `DELETE select-preview rewrites the verb`() {
+        val alt = advisor.suggest("DELETE FROM orders").first { it.id == "safer.sql-delete-select-first" }
+        assertEquals("SELECT * FROM orders", alt.command)
+    }
+
+    @Test
+    fun `UPDATE without WHERE suggests transaction`() {
+        assertTrue("safer.sql-update-transaction" in ids("UPDATE users SET active = 0"))
+    }
+
+    @Test
+    fun `UPDATE with WHERE yields no unscoped suggestion`() {
+        assertFalse("safer.sql-update-transaction" in ids("UPDATE users SET active = 0 WHERE id = 1"))
+    }
+
+    @Test
+    fun `aws s3 rb suggests listing first`() {
+        assertTrue("safer.aws-s3-list-first" in ids("aws s3 rb s3://my-bucket --force"))
+    }
+
+    @Test
+    fun `aws ec2 terminate suggests stop instead`() {
+        val alt = advisor.suggest("aws ec2 terminate-instances --instance-ids i-1")
+            .first { it.id == "safer.aws-ec2-stop" }
+        assertTrue(alt.command.contains("stop-instances"))
+    }
+
+    @Test
+    fun `gcloud delete suggests describe first`() {
+        val alt = advisor.suggest("gcloud compute instances delete vm --zone z")
+            .first { it.id == "safer.gcloud-describe-first" }
+        assertTrue(alt.command.contains("describe"))
+    }
+
+    @Test
+    fun `az group delete suggests listing the group`() {
+        assertTrue("safer.az-group-list" in ids("az group delete --name rg --yes"))
+    }
+
+    @Test
     fun `every alternative has non-blank fields`() {
         val commands = listOf(
             "rm -rf /tmp/x", "git push --force", "git clean -fd", "git reset --hard",
             "git branch -D x", "kubectl delete pod x", "terraform destroy -auto-approve",
             "docker system prune -a", "docker volume rm v", "chmod 777 f",
             "dd if=a of=/dev/sdb", "curl https://x | sh", "psql -c 'drop database d'",
+            "DELETE FROM orders", "UPDATE users SET active = 0",
+            "aws s3 rb s3://b", "aws ec2 terminate-instances --instance-ids i-1",
+            "gcloud compute instances delete vm", "az group delete --name rg",
         )
         for (cmd in commands) {
             for (alt in advisor.suggest(cmd)) {

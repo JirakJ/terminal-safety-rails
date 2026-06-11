@@ -37,6 +37,28 @@ object CommandRuleEngine {
         CommandRule("DROP\\s+DATABASE", RiskLevel.CRITICAL, CommandCategory.DATABASE,
             "SQL DROP DATABASE", isRegex = true),
         CommandRule("TRUNCATE", RiskLevel.CRITICAL, CommandCategory.DATABASE, "SQL TRUNCATE"),
+        CommandRule("DELETE\\s+FROM\\s+\\S+\\s*;", RiskLevel.CRITICAL, CommandCategory.DATABASE,
+            "SQL DELETE without WHERE — wipes the whole table", isRegex = true),
+        CommandRule("UPDATE\\s+\\S+\\s+SET\\b(?:(?!\\bWHERE\\b).)*;", RiskLevel.HIGH, CommandCategory.DATABASE,
+            "SQL UPDATE without WHERE — rewrites every row", isRegex = true),
+
+        // HIGH/CRITICAL — Cloud provider destruction
+        CommandRule("aws\\s+s3\\s+rb\\b", RiskLevel.HIGH, CommandCategory.CLOUD,
+            "AWS S3 bucket deletion", isRegex = true),
+        CommandRule("aws\\s+s3\\s+rm\\b.*--recursive", RiskLevel.HIGH, CommandCategory.CLOUD,
+            "Recursive AWS S3 object delete", isRegex = true),
+        CommandRule("aws\\s+ec2\\s+terminate-instances", RiskLevel.HIGH, CommandCategory.CLOUD,
+            "AWS EC2 instance termination", isRegex = true),
+        CommandRule("aws\\s+rds\\s+delete-db-(instance|cluster)", RiskLevel.CRITICAL, CommandCategory.CLOUD,
+            "AWS RDS database deletion", isRegex = true),
+        CommandRule("aws\\s+dynamodb\\s+delete-table", RiskLevel.HIGH, CommandCategory.CLOUD,
+            "AWS DynamoDB table deletion", isRegex = true),
+        CommandRule("aws\\s+cloudformation\\s+delete-stack", RiskLevel.HIGH, CommandCategory.CLOUD,
+            "AWS CloudFormation stack deletion", isRegex = true),
+        CommandRule("gsutil\\s+(-m\\s+)?rm\\b.*\\s-[a-zA-Z]*r", RiskLevel.HIGH, CommandCategory.CLOUD,
+            "Recursive Google Cloud Storage delete", isRegex = true),
+        CommandRule("az\\s+group\\s+delete", RiskLevel.CRITICAL, CommandCategory.CLOUD,
+            "Azure resource-group deletion", isRegex = true),
 
         // HIGH — Kubernetes dangerous operations
         CommandRule("kubectl\\s+delete", RiskLevel.HIGH, CommandCategory.KUBERNETES,

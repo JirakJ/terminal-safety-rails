@@ -4,6 +4,7 @@
  */
 package com.jakubjirak.terminalsafety.risk
 
+import com.jakubjirak.terminalsafety.risk.detectors.CloudDestructiveDetector
 import com.jakubjirak.terminalsafety.risk.detectors.CredentialExposureDetector
 import com.jakubjirak.terminalsafety.risk.detectors.DestructiveFileOpsDetector
 import com.jakubjirak.terminalsafety.risk.detectors.DiskWipeDetector
@@ -15,6 +16,7 @@ import com.jakubjirak.terminalsafety.risk.detectors.PrivilegeEscalationDetector
 import com.jakubjirak.terminalsafety.risk.detectors.ProductionTargetDetector
 import com.jakubjirak.terminalsafety.risk.detectors.RemoteCodeExecutionDetector
 import com.jakubjirak.terminalsafety.risk.detectors.ShellInjectionDetector
+import com.jakubjirak.terminalsafety.risk.detectors.UnscopedSqlMutationDetector
 
 /**
  * Pure scorer that orchestrates every [RiskSignalDetector] and produces a
@@ -82,6 +84,8 @@ class CommandRiskScorer(
             ForkBombDetector(),
             GitHistoryRewriteDetector(),
             PackageManagerPrivilegedDetector(),
+            CloudDestructiveDetector(),
+            UnscopedSqlMutationDetector(),
         )
     }
 }
