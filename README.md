@@ -1,8 +1,8 @@
 # Terminal Safety Rails
 
+[![Version](https://img.shields.io/badge/version-2026.8.0-blue)](https://plugins.jetbrains.com/plugin/30203)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Build](https://github.com/JirakJ/terminal-safety-rails/actions/workflows/build.yml/badge.svg)](https://github.com/JirakJ/terminal-safety-rails/actions/workflows/build.yml)
-[![Version](https://img.shields.io/badge/version-2026.2.1-blue.svg)](https://github.com/JirakJ/terminal-safety-rails/releases)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 > Detects dangerous commands in your IDE terminal and shows a confirmation dialog before execution — protecting against accidental `rm -rf`, `kubectl delete`, `terraform destroy`, and more.
 
@@ -297,11 +297,19 @@ cd terminal-safety-rails
 
 Terminal Safety Rails pairs with [Kubernetes Context Guard](https://github.com/JirakJ/kubernetes-context-guard) and [Local Secrets Tripwire](https://github.com/JirakJ/local-secrets-tripwire) for comprehensive protection against accidental production changes and secret leaks.
 
-## 📝 License
-
-MIT License — see [LICENSE](LICENSE) for details.
-
 ## 👤 Author
 
 **Jakub Jirák**
 - GitHub: [@JirakJ](https://github.com/JirakJ)
+
+## Free & open source
+
+As of version 2026.8.0 this plugin is completely free — every feature is unlocked and no license is needed. The source code is available at https://github.com/JirakJ/terminal-safety-rails under the Apache License 2.0.
+
+## Contributing
+
+Issues and pull requests are welcome — please open them on GitHub.
+
+## License
+
+Copyright 2026 Jakub Jirák. Licensed under the [Apache License, Version 2.0](LICENSE).

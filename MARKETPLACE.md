@@ -23,10 +23,10 @@ Detect and block destructive terminal commands like rm -rf, kubectl delete, and 
   <li><b>Pre-execution interception</b> — catches commands before they reach the shell</li>
   <li><b>4 risk levels</b> — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW — with color-coded confirmation dialogs</li>
   <li><b>23 built-in dangerous command patterns</b> — covering filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions</li>
-  <li><b>Context-aware detection (Pro)</b> — understands kubectl context, terraform workspace, and git branch</li>
+  <li><b>Context-aware detection</b> — understands kubectl context, terraform workspace, and git branch</li>
   <li><b>Team-shared rules</b> — commit <code>.terminal-safety-rules.yaml</code> to your repository</li>
-  <li><b>Audit logging (Pro)</b> — track every interception with timestamps and decisions</li>
-  <li><b>Command analytics (Pro)</b> — statistics dashboard for interception patterns</li>
+  <li><b>Audit logging</b> — track every interception with timestamps and decisions</li>
+  <li><b>Command analytics</b> — statistics dashboard for interception patterns</li>
 </ul>
 
 <h3>Built-in Protection Covers</h3>
@@ -36,34 +36,23 @@ Detect and block destructive terminal commands like rm -rf, kubectl delete, and 
   <li><b>MEDIUM:</b> <code>docker system prune</code>, <code>docker rm -f</code>, <code>git push --force</code>, <code>git reset --hard</code>, <code>chmod 777</code>, <code>systemctl stop</code></li>
 </ul>
 
-<h2>Free Tier</h2>
-<p>Comprehensive protection out of the box — no credit card required:</p>
+<h2>Core Features</h2>
 <ul>
   <li>Command interception with pre-execution validation</li>
   <li>All 23 built-in dangerous command patterns</li>
   <li>4-level risk classification with color-coded dialogs</li>
-  <li>Up to 5 custom rules</li>
+  <li>Custom rules</li>
   <li>Team-shared rules via <code>.terminal-safety-rules.yaml</code></li>
   <li>Enable/disable toggle</li>
 </ul>
 
-<h2>Pro Tier ($3.90/month)</h2>
-<p>Designed for teams who work with production systems daily:</p>
+<h2>Advanced Features</h2>
 <ul>
   <li><b>Unlimited custom rules</b> — define patterns specific to your infrastructure</li>
   <li><b>Context-aware detection</b> — automatic risk elevation based on kubectl context, terraform workspace, or git branch</li>
   <li><b>Audit log</b> — complete history of intercepted commands with ALLOWED/BLOCKED/CANCELLED status</li>
   <li><b>Analytics dashboard</b> — visualize interception statistics and patterns</li>
   <li><b>Command interception analytics</b> — identify the most frequently triggered rules</li>
-</ul>
-
-<h2>Team Tier ($7.90/user/month)</h2>
-<p>Designed for teams who need centralized safety enforcement:</p>
-<ul>
-  <li>All Pro features included</li>
-  <li><b>Team notifications</b> — webhook integration for critical interceptions</li>
-  <li><b>Centralized policy enforcement</b> — manage rules across the organization</li>
-  <li><b>Admin dashboard</b> — team-wide visibility into command safety</li>
 </ul>
 
 <h2>Getting Started</h2>
@@ -98,15 +87,11 @@ terminal, safety, devops, command-protection, production-safety
 DevOps
 
 ## Pricing
-| Tier | Price | Features |
-|------|-------|----------|
-| Free | $0 | 23 built-in patterns, 4 risk levels, color-coded dialogs, up to 5 custom rules, team-shared rules |
-| Pro | $3.90/month | Unlimited custom rules, context-aware detection, audit log, analytics dashboard |
-| Team | $7.90/user/month | All Pro features + team notifications, centralized policy enforcement, admin dashboard |
+All features are free for everyone — no license needed. Source code under Apache-2.0: https://github.com/JirakJ/terminal-safety-rails
 
 ## Screenshots Needed
 1. **Confirmation dialog** — color-coded modal showing a CRITICAL-risk command (e.g., `rm -rf /`) with risk level, command details, and Execute/Cancel buttons
 2. **Built-in rules list** — the settings panel displaying all 23 dangerous command patterns organized by risk level
-3. **Context-aware detection (Pro)** — showing elevated risk when kubectl context is production
-4. **Audit log (Pro)** — the interception history view with timestamps, commands, and ALLOWED/BLOCKED status
+3. **Context-aware detection** — showing elevated risk when kubectl context is production
+4. **Audit log** — the interception history view with timestamps, commands, and ALLOWED/BLOCKED status
 5. **Team rules file** — example `.terminal-safety-rules.yaml` loaded in the IDE

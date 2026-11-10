@@ -53,35 +53,25 @@ Out-of-the-box protection covering:
 - **Permissions** — `chmod 777`
 
 #### ✏️ Custom Rules
-Add your own dangerous command patterns with configurable risk level, category, description, and regex/glob matching. Free tier supports up to 5 custom rules.
+Add your own dangerous command patterns with configurable risk level, category, description, and regex/glob matching.
 
-#### 🔍 Context-Aware Detection *(Pro)*
+#### 🔍 Context-Aware Detection
 Smarter matching based on environment — automatic risk elevation when kubectl context is production, terraform workspace is prod, or git branch is main/master.
 
-#### 📜 Audit Log *(Pro)*
+#### 📜 Audit Log
 Track all intercepted commands with timestamps and actions (ALLOWED / BLOCKED / CANCELLED). Full history of every dangerous command encountered.
 
-#### 📊 Statistics Dashboard *(Pro)*
+#### 📊 Statistics Dashboard
 Visualize interception analytics and identify the most frequently triggered rules.
 
 #### 👥 Team-Shared Rules
 Place a `.terminal-safety-rules.yaml` file in your project root to share safety rules across the team. Rules are loaded automatically and merged with built-in and custom rules.
 
-#### 🔔 Team Notifications *(Team)*
-Webhook integration for critical interceptions — notify Slack, Teams, or PagerDuty when dangerous commands are executed.
-
-#### 🏢 Centralized Policy Enforcement *(Team)*
-Manage safety rules across the organization with an admin dashboard for team-wide visibility.
-
 ---
 
-### 💰 Pricing Model
+### 💚 Free & open source
 
-| Tier | Price | Highlights |
-|------|-------|------------|
-| **Free** | $0 | 23 built-in patterns, 4 risk levels, color-coded confirmation dialogs, up to 5 custom rules, team-shared rules via YAML, enable/disable toggle |
-| **Pro** | $3.90/month | Unlimited custom rules, context-aware detection, audit log, analytics dashboard |
-| **Team** | $7.90/user/month | All Pro features + team notifications via webhooks, centralized policy enforcement, admin dashboard |
+All features are free for everyone — no license needed. Source code under Apache-2.0: https://github.com/JirakJ/terminal-safety-rails
 
 ---
 
@@ -124,8 +114,8 @@ Manage safety rules across the organization with an admin dashboard for team-wid
 | 3 | `medium-risk-git-force.png` | MEDIUM-risk dialog for `git push --force` with yellow warning |
 | 4 | `settings-built-in-rules.png` | Settings panel displaying all 23 built-in dangerous command patterns organized by risk level |
 | 5 | `custom-rules-editor.png` | Custom rules editor with pattern, risk level, category, description, and regex toggle fields |
-| 6 | `context-aware-detection.png` | Context-aware detection showing elevated risk when kubectl context is production (Pro) |
-| 7 | `audit-log.png` | Audit log showing interception history with timestamps, commands, and ALLOWED/BLOCKED status (Pro) |
+| 6 | `context-aware-detection.png` | Context-aware detection showing elevated risk when kubectl context is production |
+| 7 | `audit-log.png` | Audit log showing interception history with timestamps, commands, and ALLOWED/BLOCKED status |
 | 8 | `team-rules-yaml.png` | Example `.terminal-safety-rules.yaml` file loaded in the IDE for team-shared rules |
 
 ---
@@ -186,8 +176,6 @@ Manage safety rules across the organization with an admin dashboard for team-wid
 - [ ] Plugin description under 255 characters for short description field
 - [ ] Full description formatted in HTML for Marketplace submission
 - [ ] Screenshots captured at 1280×800 minimum resolution (especially confirmation dialogs)
-- [ ] Pricing tiers configured in JetBrains Marketplace vendor portal
-- [ ] License agreement uploaded
 - [ ] Plugin JAR/ZIP tested on IntelliJ IDEA 2024.3 (build 232)
 - [ ] Plugin JAR/ZIP tested on latest IntelliJ IDEA version
 - [ ] All 23 built-in rules verified and working
