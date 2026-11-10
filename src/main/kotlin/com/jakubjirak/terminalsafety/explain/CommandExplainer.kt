@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2026 Jakub Jirák. All rights reserved.
- * Licensed under the terms of the JetBrains Marketplace EULA.
+ * Copyright 2026 Jakub Jirák
+ * Licensed under the Apache License, Version 2.0 (see LICENSE).
  */
 package com.jakubjirak.terminalsafety.explain
 
