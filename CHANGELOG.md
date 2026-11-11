@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2026.9.0] - 2026-11-11
+
 ### Fixed
 - Team rules from `.terminal-safety-rules.yaml` were parsed but never applied to terminal commands; they are now evaluated after your custom rules and before the built-in rules.
 
