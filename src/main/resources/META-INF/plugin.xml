@@ -64,6 +64,7 @@
 </ul>]]></description>
 
     <change-notes><![CDATA[
+      <h3>2026.9.0</h3><ul><li>Fixed: Team rules from <code>.terminal-safety-rules.yaml</code> were parsed but never applied to terminal commands; they are now evaluated after your custom rules and before the built-in rules.</li><li>Changed: Documentation no longer advertises "context-aware detection" or a separate statistics dashboard; the stated minimum IDE version is now 2025.1 (matching <code>since-build</code> 251).</li></ul>
       <h3>2026.8.0</h3><ul><li>The plugin is now completely free — all features unlocked, no license needed.</li><li>Source code is now open source under Apache-2.0: https://github.com/JirakJ/terminal-safety-rails</li></ul>
 
         <h3>2026.5.0</h3>
