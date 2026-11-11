@@ -2,7 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>ComplexCondition:AuditJson.kt$AuditJson.JsonReader$c == ' ' || c == '\t' || c == '\n' || c == '\r'</ID>
     <ID>CyclomaticComplexMethod:AuditJson.kt$AuditJson.JsonReader$private fun readNumber(): Number</ID>
     <ID>CyclomaticComplexMethod:AuditJson.kt$AuditJson.JsonReader$private fun readString(): String</ID>
     <ID>CyclomaticComplexMethod:AuditLogStore.kt$AuditLogStore$fun query(filter: AuditFilter = AuditFilter()): Sequence&lt;AuditEvent></ID>
@@ -14,35 +13,20 @@
     <ID>CyclomaticComplexMethod:RuleLintCli.kt$RuleLintCli$fun run(args: Array&lt;String>): Result</ID>
     <ID>CyclomaticComplexMethod:RuleLinter.kt$RuleLinter$internal fun checkUnreachableRules( rules: List&lt;CommandRule>, linesByIndex: Map&lt;Int, Int>, ): List&lt;RuleLintIssue></ID>
     <ID>CyclomaticComplexMethod:RuleLinter.kt$RuleLinter$private fun parseWithLines(text: String): List&lt;ParsedRule></ID>
-    <ID>ImplicitDefaultLocale:AuditJson.kt$AuditJson$String.format("%04x", c.code)</ID>
-    <ID>ImplicitDefaultLocale:RuleLintCli.kt$RuleLintCli$String.format("%04x", ch.code)</ID>
     <ID>LongMethod:CommandRiskCli.kt$CommandRiskCli$fun run(args: Array&lt;String>): Result</ID>
     <ID>LongMethod:DangerousCommandDialog.kt$DangerousCommandDialog$override fun createCenterPanel(): JComponent</ID>
     <ID>LongMethod:HistoryAuditReporters.kt$HistoryAuditHtmlReporter$fun render(report: HistoryAuditReport, top: Int = 50): String</ID>
-    <ID>LongParameterList:AuditExporterTest.kt$AuditExporterTest$( id: String = "e1", ts: Long = 1_700_000_000_000L, user: String = "alice", host: String = "host1", project: String = "proj", ruleId: String = "FS:rm -rf /", decision: UserDecision = UserDecision.CONFIRMED_BLOCKED, cmd: String = "rm -rf /", hash: String = "abcd1234", )</ID>
-    <ID>LongParameterList:AuditFilterTest.kt$AuditFilterTest$( id: String = "e1", ts: Long = 1_000L, ruleId: String = "r1", decision: UserDecision = UserDecision.CONFIRMED_BLOCKED, cmd: String = "rm -rf /", user: String = "alice", )</ID>
-    <ID>LongParameterList:RuleLinterTest.kt$RuleLinterTest$( pattern: String, risk: RiskLevel = RiskLevel.MEDIUM, category: CommandCategory = CommandCategory.CUSTOM, description: String = "desc", isRegex: Boolean = false, id: String? = null, )</ID>
     <ID>LoopWithTooManyJumpStatements:AuditLogStore.kt$AuditLogStore$for</ID>
     <ID>LoopWithTooManyJumpStatements:AuditLogStore.kt$AuditLogStore$while</ID>
     <ID>LoopWithTooManyJumpStatements:CommandExplainer.kt$CommandExplainer$for</ID>
     <ID>LoopWithTooManyJumpStatements:PrivilegeEscalationDetector.kt$PrivilegeEscalationDetector$for</ID>
     <ID>LoopWithTooManyJumpStatements:RuleLinter.kt$RuleLinter$for</ID>
     <ID>LoopWithTooManyJumpStatements:ShellHistoryParser.kt$ShellHistoryParser$for</ID>
-    <ID>MaxLineLength:CommandExplainer.kt$CommandExplainer$"Force-deletes ${describeTargets(targets, "branch")} even if its commits are not merged anywhere — those commits become unreachable."</ID>
-    <ID>MaxLineLength:CommandExplainer.kt$CommandExplainer$"Force-kills ${describeTargets(targets, "process")} with SIGKILL — no graceful shutdown, open files and transactions are abandoned."</ID>
-    <ID>MaxLineLength:CommandExplainer.kt$CommandExplainer$"Overwrites the remote branch history with your local history — commits pushed by others since your last fetch are discarded."</ID>
-    <ID>MaxLineLength:CommandExplainer.kt$CommandExplainer$"Removes ${describeTargets(targets, "container")}${if (flags.any { it.dangerous }) ", killing it first if it is still running" else ""}."</ID>
-    <ID>MaxLineLength:CommandExplainer.kt$CommandExplainer$CommandExplanation(program, "rmi", sudo, flags, targets, "Removes ${describeTargets(targets, "image")} from the local image store.")</ID>
-    <ID>MaxLineLength:CommandExplainer.kt$CommandExplainer$a.startsWith("if=") -> { input = a.substringAfter('='); flags += ExplainedFlag(a, "read from ${a.substringAfter('=')}", false) }</ID>
-    <ID>MaxLineLength:HistoryAuditReporters.kt$HistoryAuditHtmlReporter$sb.append("&lt;table>\n&lt;thead>&lt;tr>&lt;th>Score&lt;/th>&lt;th>Level&lt;/th>&lt;th>×&lt;/th>&lt;th>Command&lt;/th>&lt;th>Signals&lt;/th>&lt;th>Safer alternative&lt;/th>&lt;/tr>&lt;/thead>\n&lt;tbody>\n")</ID>
-    <ID>MaxLineLength:SaferAlternativeAdvisor.kt$SaferAlternativeAdvisor$rationale = "Piping a remote script straight into a shell executes code you have never seen — including a compromised or truncated download."</ID>
     <ID>NestedBlockDepth:AuditJson.kt$AuditJson.JsonReader$private fun readString(): String</ID>
-    <ID>ReturnCount:AuditFilter.kt$AuditFilter$fun matches(event: AuditEvent): Boolean</ID>
     <ID>ReturnCount:CommandRiskCli.kt$CommandRiskCli$fun run(args: Array&lt;String>): Result</ID>
     <ID>ReturnCount:HistoryAuditCli.kt$HistoryAuditCli$fun run(args: Array&lt;String>): Result</ID>
     <ID>ReturnCount:RuleLintCli.kt$RuleLintCli$fun run(args: Array&lt;String>): Result</ID>
     <ID>SwallowedException:CommandRiskScorer.kt$CommandRiskScorer$t: Throwable</ID>
     <ID>TooManyFunctions:CommandExplainer.kt$CommandExplainer</ID>
-    <ID>UnusedParameter:SaferAlternativeAdvisor.kt$SaferAlternativeAdvisor$original: String</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -3,6 +3,7 @@ package com.jakubjirak.terminalsafety.lint
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.Locale
 import kotlin.system.exitProcess
 
 /**
@@ -173,7 +174,7 @@ object RuleLintCli {
                 '\b' -> sb.append("\\b")
                 '\u000C' -> sb.append("\\f")
                 else -> if (ch.code < 0x20) {
-                    sb.append("\\u").append(String.format("%04x", ch.code))
+                    sb.append("\\u").append(String.format(Locale.ROOT, "%04x", ch.code))
                 } else {
                     sb.append(ch)
                 }

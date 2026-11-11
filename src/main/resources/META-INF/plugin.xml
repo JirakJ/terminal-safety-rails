@@ -45,18 +45,16 @@
   <li><b>Enable/Disable Toggle</b> — Quickly turn protection on and off</li>
 </ul>
 
+<h3>Audit &amp; Analytics</h3>
 <ul>
-  <li><b>Unlimited Custom Rules</b> — No cap on custom command patterns</li>
-  <li><b>Context-Aware Detection</b> — Smarter matching based on environment</li>
-  <li><b>Audit Log</b> — Track all intercepted commands with timestamps and actions</li>
-  <li><b>Command Statistics</b> — Analytics on intercepted commands and usage patterns</li>
+  <li><b>Incident Audit Log</b> — every intercepted command with timestamp, rule and decision; filter and export to CSV/JSON</li>
+  <li><b>Rule Effectiveness Analytics</b> — per-rule hit/block/allow counters with CSV export</li>
 </ul>
 
 <h3>Requirements</h3>
 <ul>
-  <li>IntelliJ IDEA 2024.3+ (or any JetBrains IDE based on IntelliJ Platform)</li>
+  <li>IntelliJ IDEA 2025.1+ (or another IntelliJ-based IDE, build 251+)</li>
   <li>Terminal plugin (bundled with JetBrains IDEs)</li>
-  <li>Java 17+</li>
 </ul>
 
 <h3>Support</h3>
@@ -93,7 +91,6 @@
             <li><b>Custom Rules</b> - Add your own dangerous command patterns with glob or regex matching and configurable risk levels</li>
             <li><b>Color-Coded Confirmation Dialog</b> - Visual warning dialog showing the matched command, risk level, and explanation of why the command is dangerous</li>
             <li><b>Team-Shared Rules</b> - Share safety rules across your team via a .terminal-safety-rules.yaml file in your project root</li>
-            <li><b>Context-Aware Detection</b> - Smarter matching based on the current environment and context</li>
             <li><b>Audit Log</b> - Track all intercepted commands with timestamps and actions taken</li>
             <li><b>Command Statistics</b> - Analytics on intercepted commands and team usage patterns</li>
         </ul>

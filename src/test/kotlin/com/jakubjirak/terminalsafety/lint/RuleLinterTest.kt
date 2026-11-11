@@ -15,7 +15,6 @@ class RuleLinterTest {
     private fun rule(
         pattern: String,
         risk: RiskLevel = RiskLevel.MEDIUM,
-        category: CommandCategory = CommandCategory.CUSTOM,
         description: String = "desc",
         isRegex: Boolean = false,
         id: String? = null,
@@ -23,7 +22,7 @@ class RuleLinterTest {
         val base = CommandRule(
             pattern = pattern,
             riskLevel = risk,
-            category = category,
+            category = CommandCategory.CUSTOM,
             description = description,
             isRegex = isRegex,
         )

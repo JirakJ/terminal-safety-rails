@@ -12,6 +12,7 @@ import com.jakubjirak.terminalsafety.risk.RiskAssessment
 import com.jakubjirak.terminalsafety.risk.RiskLevel as HeuristicRiskLevel
 import com.jakubjirak.terminalsafety.risk.RiskScoringService
 import com.jakubjirak.terminalsafety.rules.CommandRuleEngine
+import com.jakubjirak.terminalsafety.rules.TeamRulesLoader
 import com.jakubjirak.terminalsafety.settings.TerminalSafetySettings
 import com.jakubjirak.terminalsafety.ui.DangerousCommandDialog
 import com.intellij.execution.Executor
@@ -35,7 +36,7 @@ class CommandInterceptor : TerminalShellCommandHandler {
     override fun matches(project: Project, workingDirectory: String?, localSession: Boolean, command: String): Boolean {
         val settings = TerminalSafetySettings.getInstance()
         if (!settings.enabled) return false
-        val allRules = settings.getEffectiveRules()
+        val allRules = settings.getEffectiveRules(TeamRulesLoader.loadRules(project))
         if (CommandRuleEngine.evaluate(command, allRules) != null) return true
         // Proactive layer: also intercept on HIGH+ heuristic risk so the risk
         // alert dialog can be shown before the shell receives the command.
@@ -57,7 +58,7 @@ class CommandInterceptor : TerminalShellCommandHandler {
         val settings = TerminalSafetySettings.getInstance()
         if (!settings.enabled) return false
 
-        val allRules = settings.getEffectiveRules()
+        val allRules = settings.getEffectiveRules(TeamRulesLoader.loadRules(project))
         val ruleResult = CommandRuleEngine.evaluate(command, allRules)
 
         // Heuristic risk scoring runs BEFORE rule evaluation gating so we can

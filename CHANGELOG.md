@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- Team rules from `.terminal-safety-rules.yaml` were parsed but never applied to terminal commands; they are now evaluated after your custom rules and before the built-in rules.
+
+### Changed
+- Documentation no longer advertises "context-aware detection" or a separate statistics dashboard; the stated minimum IDE version is now 2025.1 (matching `since-build` 251).
+
 ## [2026.8.0] - 2026-11-10
 
 ### Changed

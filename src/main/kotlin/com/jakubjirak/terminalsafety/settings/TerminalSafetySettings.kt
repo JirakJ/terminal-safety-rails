@@ -44,14 +44,12 @@ class TerminalSafetySettings : PersistentStateComponent<TerminalSafetySettings> 
     val enforcementModeEnum: com.jakubjirak.terminalsafety.policy.EnforcementMode
         get() = com.jakubjirak.terminalsafety.policy.EnforcementMode.fromString(enforcementMode)
 
-    fun getEffectiveRules(): List<CommandRule> {
-        val custom = customRules.map { it.toCommandRule() }
-        return if (custom.isNotEmpty()) {
-            custom + CommandRuleEngine.DEFAULT_RULES
-        } else {
-            CommandRuleEngine.DEFAULT_RULES
-        }
-    }
+    /**
+     * Rules in evaluation order: the user's custom rules, then team rules from the project's
+     * `.terminal-safety-rules.yaml`, then the built-in defaults.
+     */
+    fun getEffectiveRules(teamRules: List<CommandRule> = emptyList()): List<CommandRule> =
+        customRules.map { it.toCommandRule() } + teamRules + CommandRuleEngine.DEFAULT_RULES
 
     fun addToAuditLog(command: String, reason: String, allowed: Boolean) {
         val action = if (allowed) "ALLOWED" else "BLOCKED"
