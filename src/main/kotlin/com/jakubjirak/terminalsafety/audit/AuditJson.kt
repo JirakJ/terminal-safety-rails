@@ -1,6 +1,7 @@
 package com.jakubjirak.terminalsafety.audit
 
 import java.security.MessageDigest
+import java.util.Locale
 
 /**
  * Hand-rolled, reflection-free JSON line codec for [AuditEvent].
@@ -14,6 +15,8 @@ import java.security.MessageDigest
  * declared by [AuditEvent]. Values are primitives or strings only.
  */
 internal object AuditJson {
+
+    private val JSON_WHITESPACE = setOf(' ', '\t', '\n', '\r')
 
     /** Serializes [event] to a single-line JSON string (no trailing newline). */
     fun encode(event: AuditEvent): String {
@@ -106,7 +109,7 @@ internal object AuditJson {
                 '\b' -> sb.append("\\b")
                 '\u000C' -> sb.append("\\f")
                 else -> if (c.code < 0x20) {
-                    sb.append("\\u").append(String.format("%04x", c.code))
+                    sb.append("\\u").append(String.format(Locale.ROOT, "%04x", c.code))
                 } else {
                     sb.append(c)
                 }
@@ -219,7 +222,7 @@ internal object AuditJson {
         private fun skipWs() {
             while (i < src.length) {
                 val c = src[i]
-                if (c == ' ' || c == '\t' || c == '\n' || c == '\r') i++ else return
+                if (c in JSON_WHITESPACE) i++ else return
             }
         }
 

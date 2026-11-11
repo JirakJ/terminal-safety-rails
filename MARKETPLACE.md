@@ -20,39 +20,16 @@ Detect and block destructive terminal commands like rm -rf, kubectl delete, and 
 
 <h2>Key Features</h2>
 <ul>
-  <li><b>Pre-execution interception</b> — catches commands before they reach the shell</li>
+  <li><b>Pre-execution interception</b> — catches commands typed in the IDE terminal before they reach the shell</li>
+  <li><b>33 built-in rules</b> — filesystem, Kubernetes, Terraform, Docker, AWS/GCP/Azure, Git, SQL, system services and permissions</li>
+  <li><b>13 heuristic detectors</b> — a 0–100 risk score independent of the rules (privilege escalation, remote code execution, production targets such as <code>kubectl --context=prod</code>, unscoped SQL mutations, …)</li>
   <li><b>4 risk levels</b> — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW — with color-coded confirmation dialogs</li>
-  <li><b>23 built-in dangerous command patterns</b> — covering filesystem, Kubernetes, Terraform, Docker, Git, SQL, system services, and permissions</li>
-  <li><b>Context-aware detection</b> — understands kubectl context, terraform workspace, and git branch</li>
-  <li><b>Team-shared rules</b> — commit <code>.terminal-safety-rules.yaml</code> to your repository</li>
-  <li><b>Audit logging</b> — track every interception with timestamps and decisions</li>
-  <li><b>Command analytics</b> — statistics dashboard for interception patterns</li>
-</ul>
-
-<h3>Built-in Protection Covers</h3>
-<ul>
-  <li><b>CRITICAL:</b> <code>rm -rf /</code>, <code>rm -rf ~</code>, <code>rm -rf *</code>, <code>mkfs</code>, <code>dd if=</code>, <code>DROP TABLE</code>, <code>DROP DATABASE</code>, <code>TRUNCATE</code></li>
-  <li><b>HIGH:</b> <code>kubectl delete</code>, <code>kubectl apply --force</code>, <code>terraform apply</code>, <code>terraform destroy</code></li>
-  <li><b>MEDIUM:</b> <code>docker system prune</code>, <code>docker rm -f</code>, <code>git push --force</code>, <code>git reset --hard</code>, <code>chmod 777</code>, <code>systemctl stop</code></li>
-</ul>
-
-<h2>Core Features</h2>
-<ul>
-  <li>Command interception with pre-execution validation</li>
-  <li>All 23 built-in dangerous command patterns</li>
-  <li>4-level risk classification with color-coded dialogs</li>
-  <li>Custom rules</li>
-  <li>Team-shared rules via <code>.terminal-safety-rules.yaml</code></li>
-  <li>Enable/disable toggle</li>
-</ul>
-
-<h2>Advanced Features</h2>
-<ul>
-  <li><b>Unlimited custom rules</b> — define patterns specific to your infrastructure</li>
-  <li><b>Context-aware detection</b> — automatic risk elevation based on kubectl context, terraform workspace, or git branch</li>
-  <li><b>Audit log</b> — complete history of intercepted commands with ALLOWED/BLOCKED/CANCELLED status</li>
-  <li><b>Analytics dashboard</b> — visualize interception statistics and patterns</li>
-  <li><b>Command interception analytics</b> — identify the most frequently triggered rules</li>
+  <li><b>Command explainer &amp; safer alternatives</b> — plain-English explanation and copy-pasteable safer equivalents in the dialog</li>
+  <li><b>Enforcement modes</b> — Warn only / Confirm / Block critical / Lockdown</li>
+  <li><b>Custom &amp; team rules</b> — your own glob/regex rules in Settings, plus team rules from a committed <code>.terminal-safety-rules.yaml</code></li>
+  <li><b>Incident audit log</b> — every interception with timestamp, rule and decision; CSV/JSON export</li>
+  <li><b>Rule effectiveness analytics</b> — per-rule hit/block/allow counters with CSV export</li>
+  <li><b>Shell history risk audit</b> — score your <code>~/.zsh_history</code> / <code>~/.bash_history</code> (MD/JSON/HTML export, headless CLI)</li>
 </ul>
 
 <h2>Getting Started</h2>
@@ -64,7 +41,7 @@ Detect and block destructive terminal commands like rm -rf, kubectl delete, and 
 
 <h2>Compatibility</h2>
 <ul>
-  <li>IntelliJ IDEA 2024.3+ and all JetBrains IDEs</li>
+  <li>IntelliJ IDEA 2025.1+ and other IntelliJ-based IDEs with the Terminal plugin</li>
   <li>macOS, Linux, and Windows</li>
   <li>Works with all shell types supported by the IDE terminal</li>
 </ul>
@@ -91,7 +68,7 @@ All features are free for everyone — no license needed. Source code under Apac
 
 ## Screenshots Needed
 1. **Confirmation dialog** — color-coded modal showing a CRITICAL-risk command (e.g., `rm -rf /`) with risk level, command details, and Execute/Cancel buttons
-2. **Built-in rules list** — the settings panel displaying all 23 dangerous command patterns organized by risk level
-3. **Context-aware detection** — showing elevated risk when kubectl context is production
+2. **Settings** — enforcement mode and custom rules
+3. **Risk alert** — heuristic risk score for a `kubectl --context=prod …` command
 4. **Audit log** — the interception history view with timestamps, commands, and ALLOWED/BLOCKED status
 5. **Team rules file** — example `.terminal-safety-rules.yaml` loaded in the IDE

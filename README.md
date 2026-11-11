@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/version-2026.8.0-blue)](https://plugins.jetbrains.com/plugin/30203)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
-[![Build](https://github.com/JirakJ/terminal-safety-rails/actions/workflows/build.yml/badge.svg)](https://github.com/JirakJ/terminal-safety-rails/actions/workflows/build.yml)
+[![Build](https://github.com/JirakJ/terminal-safety-rails/actions/workflows/verify.yml/badge.svg)](https://github.com/JirakJ/terminal-safety-rails/actions/workflows/verify.yml)
 
 > Detects dangerous commands in your IDE terminal and shows a confirmation dialog before execution — protecting against accidental `rm -rf`, `kubectl delete`, `terraform destroy`, and more.
 
@@ -30,12 +30,10 @@
 - **4 risk levels** — 🔴 CRITICAL, 🟠 HIGH, 🟡 MEDIUM, 🟢 LOW
 - **Color-coded confirmation dialog** — warning with command details and risk level
 - **33 built-in rules** — dangerous command patterns out of the box covering filesystem, Kubernetes, Terraform, Docker, AWS/GCP/Azure cloud, Git, SQL, system services, and permissions
-- **Unlimited custom rules** — add your own patterns via settings
+- **Custom rules** — add your own glob or regex patterns via settings
 - **Enable/disable toggle** — quickly turn protection on and off
-- **Context-aware detection** — smarter matching based on environment
 - **Audit log** — track all intercepted commands with timestamps and actions (ALLOWED/BLOCKED)
 - **Team-shared rules** — share rules via `.terminal-safety-rules.yaml` in your project
-- **Statistics** — command interception analytics
 - **Rule Effectiveness Analytics** — per-rule hit/block/allow counters with CSV export, persisted per project
 - **🆕 Safer alternatives** — the dialog suggests copy-pasteable safer equivalents (`--force-with-lease`, dry runs, backups first)
 - **🆕 Command explainer** — plain-English "what will this do?" with decoded flags, right in the dialog
@@ -281,8 +279,7 @@ Exit codes: `0` clean, `1` bad args / missing file, `2` issues at or above the c
 
 ## 📋 Requirements
 
-- IntelliJ IDEA 2024.3+ (or any JetBrains IDE based on IntelliJ Platform)
-- Java 17+
+- IntelliJ IDEA 2025.1+ (or another IntelliJ-based IDE, build 251+)
 - Terminal plugin (bundled with JetBrains IDEs)
 
 ## 🏗️ Building from Source

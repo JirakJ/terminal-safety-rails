@@ -24,15 +24,11 @@ data class AuditFilter(
     val limit: Int = Int.MAX_VALUE,
 ) {
     /** Returns `true` if [event] satisfies every set criterion on this filter. */
-    fun matches(event: AuditEvent): Boolean {
-        sinceEpochMs?.let { if (event.timestampEpochMs < it) return false }
-        untilEpochMs?.let { if (event.timestampEpochMs > it) return false }
-        ruleIds?.let { if (event.ruleId !in it) return false }
-        decisions?.let { if (event.decision !in it) return false }
-        commandContains?.let {
-            if (it.isNotEmpty() && !event.command.contains(it, ignoreCase = true)) return false
-        }
-        userEquals?.let { if (event.user != it) return false }
-        return true
-    }
+    fun matches(event: AuditEvent): Boolean =
+        (sinceEpochMs == null || event.timestampEpochMs >= sinceEpochMs) &&
+            (untilEpochMs == null || event.timestampEpochMs <= untilEpochMs) &&
+            (ruleIds == null || event.ruleId in ruleIds) &&
+            (decisions == null || event.decision in decisions) &&
+            (commandContains.isNullOrEmpty() || event.command.contains(commandContains, ignoreCase = true)) &&
+            (userEquals == null || event.user == userEquals)
 }

@@ -116,7 +116,8 @@ class CommandExplainer {
             "push" -> flagsAndTargets(rest, GIT_PUSH_FLAGS).let { (flags, targets) ->
                 val force = flags.any { it.dangerous }
                 val summary = if (force)
-                    "Overwrites the remote branch history with your local history — commits pushed by others since your last fetch are discarded."
+                    "Overwrites the remote branch history with your local history — " +
+                        "commits pushed by others since your last fetch are discarded."
                 else "Uploads local commits to the remote repository."
                 CommandExplanation(program, sub, sudo, flags, targets, summary)
             }
@@ -147,7 +148,8 @@ class CommandExplainer {
                 CommandExplanation(
                     program, sub, sudo, flags, targets,
                     if (flags.any { it.flag == "-D" })
-                        "Force-deletes ${describeTargets(targets, "branch")} even if its commits are not merged anywhere — those commits become unreachable."
+                        "Force-deletes ${describeTargets(targets, "branch")} even if its commits are not merged " +
+                            "anywhere — those commits become unreachable."
                     else "Manages branches.",
                 )
             }
@@ -212,12 +214,16 @@ class CommandExplainer {
                 )
             }
             args.firstOrNull() == "rmi" -> flagsAndTargets(args.drop(1), DOCKER_FORCE_FLAGS).let { (flags, targets) ->
-                CommandExplanation(program, "rmi", sudo, flags, targets, "Removes ${describeTargets(targets, "image")} from the local image store.")
+                CommandExplanation(
+                    program, "rmi", sudo, flags, targets,
+                    "Removes ${describeTargets(targets, "image")} from the local image store.",
+                )
             }
             args.firstOrNull() == "rm" -> flagsAndTargets(args.drop(1), DOCKER_FORCE_FLAGS).let { (flags, targets) ->
                 CommandExplanation(
                     program, "rm", sudo, flags, targets,
-                    "Removes ${describeTargets(targets, "container")}${if (flags.any { it.dangerous }) ", killing it first if it is still running" else ""}.",
+                    "Removes ${describeTargets(targets, "container")}" +
+                        (if (flags.any { it.dangerous }) ", killing it first if it is still running" else "") + ".",
                 )
             }
             else -> null
@@ -265,7 +271,10 @@ class CommandExplainer {
         var output: String? = null
         for (a in args) {
             when {
-                a.startsWith("if=") -> { input = a.substringAfter('='); flags += ExplainedFlag(a, "read from ${a.substringAfter('=')}", false) }
+                a.startsWith("if=") -> {
+                    input = a.substringAfter('=')
+                    flags += ExplainedFlag(a, "read from ${a.substringAfter('=')}", false)
+                }
                 a.startsWith("of=") -> {
                     output = a.substringAfter('=')
                     flags += ExplainedFlag(a, "write to ${a.substringAfter('=')}", output.startsWith("/dev/"))
@@ -320,7 +329,8 @@ class CommandExplainer {
         return CommandExplanation(
             program, null, sudo, flags, targets,
             if (nine)
-                "Force-kills ${describeTargets(targets, "process")} with SIGKILL — no graceful shutdown, open files and transactions are abandoned."
+                "Force-kills ${describeTargets(targets, "process")} with SIGKILL — no graceful shutdown, " +
+                    "open files and transactions are abandoned."
             else "Sends a termination signal to ${describeTargets(targets, "process")}.",
         )
     }
