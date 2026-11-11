@@ -43,12 +43,12 @@ class SaferAlternativeAdvisor {
         val normalized = normalize(cmd)
         val out = ArrayList<SaferAlternative>()
 
-        suggestRm(cmd, normalized, out)
-        suggestGit(cmd, normalized, out)
-        suggestKubectl(cmd, normalized, out)
-        suggestTerraform(cmd, normalized, out)
-        suggestDocker(cmd, normalized, out)
-        suggestChmod(cmd, normalized, out)
+        suggestRm(normalized, out)
+        suggestGit(normalized, out)
+        suggestKubectl(normalized, out)
+        suggestTerraform(normalized, out)
+        suggestDocker(normalized, out)
+        suggestChmod(normalized, out)
         suggestDd(normalized, out)
         suggestPipeToShell(normalized, out)
         suggestDatabase(normalized, out)
@@ -73,7 +73,7 @@ class SaferAlternativeAdvisor {
         }
     }
 
-    private fun suggestRm(original: String, cmd: String, out: MutableList<SaferAlternative>) {
+    private fun suggestRm(cmd: String, out: MutableList<SaferAlternative>) {
         if (!cmd.startsWith("rm ")) return
         val hasRecursive = RM_RECURSIVE.containsMatchIn(cmd)
         val hasForce = RM_FORCE.containsMatchIn(cmd)
@@ -101,7 +101,7 @@ class SaferAlternativeAdvisor {
         )
     }
 
-    private fun suggestGit(original: String, cmd: String, out: MutableList<SaferAlternative>) {
+    private fun suggestGit(cmd: String, out: MutableList<SaferAlternative>) {
         if (!cmd.startsWith("git ")) return
         when {
             GIT_PUSH_FORCE.containsMatchIn(cmd) && !cmd.contains("--force-with-lease") -> {
@@ -151,7 +151,7 @@ class SaferAlternativeAdvisor {
         }
     }
 
-    private fun suggestKubectl(original: String, cmd: String, out: MutableList<SaferAlternative>) {
+    private fun suggestKubectl(cmd: String, out: MutableList<SaferAlternative>) {
         if (!KUBECTL_DELETE.containsMatchIn(cmd)) return
         if (!cmd.contains("--dry-run")) {
             out += SaferAlternative(
@@ -171,7 +171,7 @@ class SaferAlternativeAdvisor {
         }
     }
 
-    private fun suggestTerraform(original: String, cmd: String, out: MutableList<SaferAlternative>) {
+    private fun suggestTerraform(cmd: String, out: MutableList<SaferAlternative>) {
         if (!TERRAFORM_DESTROY.containsMatchIn(cmd)) return
         out += SaferAlternative(
             id = "safer.terraform-plan-destroy",
@@ -189,7 +189,7 @@ class SaferAlternativeAdvisor {
         }
     }
 
-    private fun suggestDocker(original: String, cmd: String, out: MutableList<SaferAlternative>) {
+    private fun suggestDocker(cmd: String, out: MutableList<SaferAlternative>) {
         if (DOCKER_PRUNE_ALL.containsMatchIn(cmd)) {
             out += SaferAlternative(
                 id = "safer.docker-df-first",
@@ -214,7 +214,7 @@ class SaferAlternativeAdvisor {
         }
     }
 
-    private fun suggestChmod(original: String, cmd: String, out: MutableList<SaferAlternative>) {
+    private fun suggestChmod(cmd: String, out: MutableList<SaferAlternative>) {
         if (!CHMOD_777.containsMatchIn(cmd)) return
         out += SaferAlternative(
             id = "safer.chmod-least-privilege",
@@ -249,7 +249,8 @@ class SaferAlternativeAdvisor {
             id = "safer.download-inspect-run",
             title = "Download, inspect, then run",
             command = "$fetcher -o install.sh && less install.sh && sh install.sh",
-            rationale = "Piping a remote script straight into a shell executes code you have never seen — including a compromised or truncated download.",
+            rationale = "Piping a remote script straight into a shell executes code you have never seen — " +
+                "including a compromised or truncated download.",
         )
     }
 

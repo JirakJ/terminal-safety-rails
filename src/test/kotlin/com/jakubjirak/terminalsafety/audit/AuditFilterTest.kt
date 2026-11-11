@@ -8,14 +8,13 @@ import org.junit.jupiter.api.Test
 class AuditFilterTest {
 
     private fun event(
-        id: String = "e1",
         ts: Long = 1_000L,
         ruleId: String = "r1",
         decision: UserDecision = UserDecision.CONFIRMED_BLOCKED,
         cmd: String = "rm -rf /",
         user: String = "alice",
     ) = AuditEvent(
-        eventId = id,
+        eventId = "e1",
         timestampEpochMs = ts,
         isoTimestamp = AuditEvent.formatIso(ts),
         user = user,

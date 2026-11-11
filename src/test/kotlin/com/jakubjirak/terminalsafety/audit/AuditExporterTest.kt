@@ -9,28 +9,21 @@ class AuditExporterTest {
 
     private fun ev(
         id: String = "e1",
-        ts: Long = 1_700_000_000_000L,
-        user: String = "alice",
-        host: String = "host1",
-        project: String = "proj",
-        ruleId: String = "FS:rm -rf /",
-        decision: UserDecision = UserDecision.CONFIRMED_BLOCKED,
         cmd: String = "rm -rf /",
-        hash: String = "abcd1234",
     ) = AuditEvent(
         eventId = id,
-        timestampEpochMs = ts,
-        isoTimestamp = AuditEvent.formatIso(ts),
-        user = user,
-        host = host,
-        projectName = project,
-        projectPath = "/$project",
-        ruleId = ruleId,
+        timestampEpochMs = TS,
+        isoTimestamp = AuditEvent.formatIso(TS),
+        user = "alice",
+        host = "host1",
+        projectName = "proj",
+        projectPath = "/proj",
+        ruleId = "FS:rm -rf /",
         ruleDescription = "desc",
         ruleAction = "CRITICAL",
-        decision = decision,
+        decision = UserDecision.CONFIRMED_BLOCKED,
         command = cmd,
-        commandHash = hash,
+        commandHash = "abcd1234",
     )
 
     @Test
@@ -82,5 +75,9 @@ class AuditExporterTest {
         val line = csv.lines()[1]
         assertFalse(line.contains("\"plaincommand\""), line)
         assertTrue(line.contains(",plaincommand,"), line)
+    }
+
+    private companion object {
+        const val TS = 1_700_000_000_000L
     }
 }

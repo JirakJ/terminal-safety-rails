@@ -183,7 +183,8 @@ object HistoryAuditHtmlReporter {
 
         val risky = report.topRisky(top)
         sb.append("<h2>Top risky commands (").append(risky.size).append(")</h2>\n")
-        sb.append("<table>\n<thead><tr><th>Score</th><th>Level</th><th>×</th><th>Command</th><th>Signals</th><th>Safer alternative</th></tr></thead>\n<tbody>\n")
+        sb.append("<table>\n<thead><tr><th>Score</th><th>Level</th><th>×</th><th>Command</th>")
+            .append("<th>Signals</th><th>Safer alternative</th></tr></thead>\n<tbody>\n")
         if (risky.isEmpty()) {
             sb.append("<tr><td colspan=\"6\">No risky commands found — nice and boring history! 🎉</td></tr>\n")
         } else {
